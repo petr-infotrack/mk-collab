@@ -12,16 +12,16 @@ Global
 		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://syd-schbuild-01:8080/tfs/ldmrepository
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Ldm.Charting.Data\\Ldm.Charting.Data.csproj
-		SccProjectName1 = Ldm.Charting.Data
-		SccLocalPath1 = Ldm.Charting.Data
-		SccProjectUniqueName2 = Ldm.Charting.Web.Tests\\Ldm.Charting.Web.Tests.csproj
-		SccProjectName2 = Ldm.Charting.Web.Tests
-		SccLocalPath2 = Ldm.Charting.Web.Tests
-		SccProjectUniqueName3 = Ldm.Charting.Web\\Ldm.Charting.Web.csproj
-		SccProjectName3 = Ldm.Charting.Web
-		SccLocalPath3 = Ldm.Charting.Web
+		SccProjectUniqueName0 = Ldm.Charting.Data\\Ldm.Charting.Data.csproj
+		SccProjectName0 = Ldm.Charting.Data
+		SccLocalPath0 = Ldm.Charting.Data
+		SccProjectUniqueName1 = Ldm.Charting.Web.Tests\\Ldm.Charting.Web.Tests.csproj
+		SccProjectName1 = Ldm.Charting.Web.Tests
+		SccLocalPath1 = Ldm.Charting.Web.Tests
+		SccProjectUniqueName2 = Ldm.Charting.Web\\Ldm.Charting.Web.csproj
+		SccProjectName2 = Ldm.Charting.Web
+		SccLocalPath2 = Ldm.Charting.Web
+		SccLocalPath3 = .
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
