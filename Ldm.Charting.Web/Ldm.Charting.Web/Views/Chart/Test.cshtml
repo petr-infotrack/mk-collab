@@ -1,0 +1,65 @@
+﻿@{
+    //ViewBag.Title = "Test";
+    Layout = null;
+}
+
+@*@{
+    var myChart = new Chart(width: 600, height: 400)
+        .AddTitle("Chart Title");
+
+    myChart.AddSeries(name: "Test", xValue: Model.Select(x => x.dateordered), yValues: Model.Select(x => x.Minutes));
+        //(Model, "dateordered");
+    myChart.Write();
+        
+
+}*@
+<html>
+    <head>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi "></script>
+        <script type="text/javascript">
+            setInterval(function () {
+                console.log("Event");
+                $('#Chart1').attr('src', '@Url.Action("CreateQueueCountsChart2", null, new { width = 900, height = 800 })' + '&' + new Date().getTime());
+            },1000);
+
+                //google.load("visualization", "1", { packages: ["corechart"] });
+                //google.setOnLoadCallback(drawChart);
+            
+                //function drawChart() {
+                //    $.post('GetVicImagesChartData', {},
+                //function (data) {
+                
+                //    var tdata = new google.visualization.DataTable();
+                //    var rows = data.length;
+
+                //    tdata.addColumn('number', 'Record');
+                //    tdata.addColumn('number', 'Minutes');
+
+                //    for (var i = 0; i < data.length; i++) {
+                //        tdata.addRow([i, data[i]]);
+                //    }
+
+                //    var options = {
+                //        title: 'Vic Image Counts',
+                //        isStacked: true,
+                //        width: 1024,
+                //        height: 700,
+                //        vAxis: { title: "Minutes" },
+                //        hAxis: { title: "Record" }
+                //    };
+                //    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                //    chart.draw(tdata, options);
+                //});
+            //}
+
+
+        </script>
+    </head>
+    <body>
+        @*<div id="chart_div" style="width: 1024px; height: 700px;"></div>*@
+        <div>
+            <img id="Chart1" src="//:0" />
+        </div>
+    </body>
+</html>

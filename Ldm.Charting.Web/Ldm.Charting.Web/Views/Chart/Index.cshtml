@@ -1,0 +1,62 @@
+﻿@{
+    ViewBag.Title = "Ldm Charts";
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            setInterval(drawCharts, 60000);
+            drawCharts();
+        });
+
+        $(window).resize(function () {
+            console.log($(window).width());
+        });
+
+        function drawCharts() {
+            var browserWidth = $(window).width();
+            var browserHeight = $(window).height();
+            var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
+            var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
+            
+            // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
+            var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
+            var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
+        
+            QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
+            VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
+
+            $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
+            $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
+
+            $('#leftinner').css('position', 'absolute').css(
+                {
+                    'margin-left': -(QueueImageSize.width / 2) + 'px',
+                    'margin-top': -(QueueImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
+                });
+            $('#rightinner').css('position', 'absolute').css(
+                {
+                    'margin-left': -(VicImagesImageSize.width / 2) + 'px',
+                    'margin-top': -(VicImagesImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
+                });
+        }
+    </script>
+}
+
+<div id="left">
+    <div id="leftinner">
+        <div class="title" id="chart1title">
+            Queue Counts
+        </div>
+        <img id="chart1" src="//:0" />
+    </div>
+</div>
+<div id="right">
+    <div id="rightinner">
+        <div class="title" id="chart2title">
+            Vic Image Counts
+        </div>
+        <img id="chart2" src="//:0" />
+    </div>
+</div>
+
