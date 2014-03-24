@@ -15,7 +15,7 @@
 <body>
     <div>
         @RenderBody()
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="@Url.Content("/Scripts/jquery-2.0.3.min.js")"></script>
         @RenderSection("scripts", required: false)
     </div>
 </body>
