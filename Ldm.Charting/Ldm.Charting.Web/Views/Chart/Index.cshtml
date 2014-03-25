@@ -15,6 +15,9 @@
             var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             
+@if(ViewBag.RabbitMqServerUrl != null) {
+            <text>QueueImageSize.height -= 160;</text>
+}
             // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
             var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
             var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
@@ -28,7 +31,12 @@
             $('#leftinner').css('position', 'absolute').css(
                 {
                     'margin-left': -(QueueImageSize.width / 2) + 'px',
-                    'margin-top': -(QueueImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
+                    
+@if(ViewBag.RabbitMqServerUrl != null) {
+                    <text>'margin-top': -(QueueImageSize.height / 2) - 84 + 'px', 'left': '50%', 'top': '50%'</text>
+} else {
+                    <text>'margin-top': -(QueueImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'</text>
+}
                 });
             $('#rightinner').css('position', 'absolute').css(
                 {
@@ -41,10 +49,20 @@
 
 <div id="left">
     <div id="leftinner">
-        <div class="title" id="chart1title">
-            Queue Counts
+        <div id="tophalf">            
+@if(ViewBag.RabbitMqServerUrl != null) {
+            <div class="title" id="rabbitTitle">
+                Rabbit MQ Server
+            </div>
+            <iframe src="@(ViewBag.RabbitMqServerUrl)" width="1000px" height="100px" frameborder="0" style="margin-top: 10px; margin-left: 150px;"></iframe>
+}
         </div>
-        <img id="chart1" src="//:0" />
+        <div id="bottomhalf">
+            <div class="title" id="chart1title">
+                Queue Counts
+            </div>
+            <img id="chart1" src="//:0" />
+        </div>
     </div>
 </div>
 <div id="right">

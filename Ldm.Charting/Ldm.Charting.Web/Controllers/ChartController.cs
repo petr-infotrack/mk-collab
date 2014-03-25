@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
+using System.Configuration;
 
 
 namespace Ldm.Charting.Web.Controllers
@@ -16,6 +17,8 @@ namespace Ldm.Charting.Web.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.RabbitMqServerUrl = ConfigurationManager.AppSettings["rabbit_mq_server_url"];
+
             return View();
         }
 
@@ -37,6 +40,7 @@ namespace Ldm.Charting.Web.Controllers
             chart.SaveImage(ms);
             return File(ms.GetBuffer(), @"image/png");
         }
+
         public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000)
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
