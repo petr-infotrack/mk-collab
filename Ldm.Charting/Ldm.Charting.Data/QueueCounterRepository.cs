@@ -15,7 +15,7 @@ namespace Ldm.Charting.Data
 
         public int GetOrderUpdatesCount(string Identifier)
         {
-            return _db.Query<int>("SELECT COUNT(*) QueueLength FROM ldmcore.dbo.orderupdates WITH (NOLOCK) where Identifier like @Identifier", new { Identifier = Identifier }).Single();
+            return _db.Query<int>("SELECT COUNT(*) QueueLength FROM orderupdates WITH (NOLOCK) where Identifier like @Identifier", new { Identifier = Identifier }).Single();
         }
 
         public int GetQueueCount(string Table)
@@ -26,7 +26,7 @@ namespace Ldm.Charting.Data
         public int GetOrderUpdatesCountWhere(string Where)
         {
             var query =
-                String.Format("SELECT COUNT(*) QueueLength FROM ldmcore.dbo.orderupdates WITH (NOLOCK) WHERE {0}", Where);
+                String.Format("SELECT COUNT(*) QueueLength FROM orderupdates WITH (NOLOCK) WHERE {0}", Where);
             return _db.Query<int>(query).Single();
         }
     }
