@@ -12,63 +12,39 @@
         function drawCharts() {
             var browserWidth = $(window).width();
             var browserHeight = $(window).height();
-            var QueueImageSize = { width: Math.ceil(browserWidth / 2) - 10, height: Math.ceil(browserHeight) - 100 };
-            var VicImagesImageSize = { width: Math.ceil(browserWidth / 2) - 10, height: Math.ceil(browserHeight) - 100 };
+            var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
+            var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             
-            @if(ViewBag.MsmqMonitoring == true) 
-{
-            <text>
-            var MsmqMonitorImageSize = { width: Math.ceil(browserWidth / 2), height: 200 };
-            QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 370 }
-            </text>    
-}
-
             // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
             var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-            QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
-            $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
-
             var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
+        
+            QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
             VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
+
+            $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
             $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
 
-
-@if(ViewBag.MsmqMonitoring == true) 
-{
-    <text>
-            var MsmqLink = '@Html.Raw(Url.Action("CreateMsmqCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-            MsmqLink = MsmqLink.replace('imageWidth', MsmqMonitorImageSize.width).replace('imageHeight', MsmqMonitorImageSize.height);
-            $('#chart3').attr('src', MsmqLink + '&' + new Date().getTime());
-            </text>
-}
+            $('#leftinner').css('position', 'absolute').css(
+                {
+                    'margin-left': -(QueueImageSize.width / 2) + 'px',
+                    'margin-top': -(QueueImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
+                });
+            $('#rightinner').css('position', 'absolute').css(
+                {
+                    'margin-left': -(VicImagesImageSize.width / 2) + 'px',
+                    'margin-top': -(VicImagesImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
+                });
         }
     </script>
 }
 
 <div id="left">
     <div id="leftinner">
-        <div id="tophalf">            
-@if (ViewBag.RabbitMqServerUrl != null)
-{
-            <div class="title" id="rabbitTitle">
-                Rabbit MQ Server
-            </div>
-            <iframe src="@(ViewBag.RabbitMqServerUrl)" width="1000px" height="100px" frameborder="0" style="margin-top: 10px; margin-left: 150px;"></iframe>
-}
-else if (ViewBag.MsmqMonitoring == true)
-{
-            <div class="title" id="nserviceBusTitle">
-                NServiceBus Queue Counts
-            </div>
-            <img id="chart3" src="//:0" />
-}
+        <div class="title" id="chart1title">
+            Queue Counts
         </div>
-        <div id="bottomhalf">
-            <div class="title" id="chart1title">
-                Queue Counts
-            </div>
-            <img id="chart1" src="//:0" />
-        </div>
+        <img id="chart1" src="//:0" />
     </div>
 </div>
 <div id="right">
