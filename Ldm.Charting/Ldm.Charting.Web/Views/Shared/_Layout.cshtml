@@ -7,7 +7,8 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link href="@Url.Content("~/Content/site.css")" rel="stylesheet" type="text/css" />
-    
+    <link href="@Url.Content("~/Content/emc2-alert-boxes.css")" rel="stylesheet" type="text/css" />
+
     @*@Styles.Render("~/Content/css")*@
 
     <title>@ViewBag.Title</title>
@@ -16,6 +17,7 @@
     <div>
         @RenderBody()
         <script type="text/javascript" src="@Url.Content("/Scripts/jquery-2.0.3.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("/Scripts/emc2-alert-boxes.js")"></script>
         @RenderSection("scripts", required: false)
     </div>
 </body>

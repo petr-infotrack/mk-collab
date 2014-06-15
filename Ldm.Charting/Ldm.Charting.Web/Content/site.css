@@ -1,25 +1,31 @@
 ﻿html,
-body {
+body
+{
     background-color: black;
     color: white;
-    height: 100%; 
+    height: 100%;
     padding: 0;
     margin: 0;
     overflow: hidden;
 }
-.title {
+
+.title
+{
     font-family: 'Segoe UI';
     font-size: 2em;
     text-align: center;
 }
 
-#chart1content {
+#chart1content
+{
     width: 50%;
     margin-left: auto;
     margin-right: auto;
     float: left;
 }
-#chart2content {
+
+#chart2content
+{
     display: block;
     width: 50%;
     margin-left: auto;
@@ -27,25 +33,36 @@ body {
     float: right;
 }
 
-.outline {
+
+.emc2-alert-box
+{
+    width: 500px;
+    min-height: 80px;
+    margin-bottom: 10px;
+     margin-right: 50px;
+}
+
+.outline
+{
     /*outline: 2px solid white;*/
     overflow: hidden;
     overflow-y: hidden;
 }
 
-#left {
+#left
+{
     position: absolute;
-    top:0%;
-    left:0%;
+    top: 0%;
+    left: 0%;
     right: 50%;
     bottom: 0%;
 }
 
-#right {
+#right
+{
     position: absolute;
-    top:0%;
-    left:50%;
+    top: 0%;
+    left: 50%;
     right: 0%;
     bottom: 0%;
 }
-

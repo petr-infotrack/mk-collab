@@ -134,6 +134,8 @@
     <Content Include="Content\site.css" />
     <None Include="Properties\PublishProfiles\Ldm.Charting.Web.pubxml" />
     <None Include="Scripts\jquery-2.0.3.intellisense.js" />
+    <Content Include="Content\emc2-alert-boxes.css" />
+    <Content Include="Scripts\emc2-alert-boxes.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
     <Content Include="Scripts\knockout-2.3.0.debug.js" />

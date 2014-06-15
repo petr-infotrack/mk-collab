@@ -1,10 +1,11 @@
-﻿@{
+﻿@using System.Configuration
+@{
     ViewBag.Title = "Ldm Charts";
 }
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             setInterval(drawCharts, 60000);
             drawCharts();
         });
@@ -14,11 +15,33 @@
             var browserHeight = $(window).height();
             var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
-            
+
             // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
             var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
             var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-        
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetErrors")',
+                success: function(data) {
+                    if ($(data).length > 0) {
+                        $('#vicImage').hide();
+                        $('#errorsList').show();
+                    } else {
+                        $('#vicImage').show();
+                        $('#errorsList').hide();
+                    }
+
+                    $('#errorList').empty();
+
+                    $.each(data, function(index, val) {
+                        var message = "<div style='font-size:25px;font-family:arial'><span style='color:#000000'>" + getTimeString($(val)[0].FirstOccurrence) + " </span> (" + $(val)[0].Occurrences + " Occurrences)</div><br /><div style='font-size:18px;font-family:arial'> " + $(val)[0].ErrorMessage + "</div>";
+                        var justAdded = $('#errorList').append("<div id='alert1' class='box' style='margin-bottom:10px'>" +"</div>");
+                        justAdded.emc2alert({ text: message, type: getTimeColour($(val)[0].FirstOccurrence) });
+                    });
+                }
+            });
+
             QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
             VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
 
@@ -26,15 +49,34 @@
             $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
 
             $('#leftinner').css('position', 'absolute').css(
-                {
-                    'margin-left': -(QueueImageSize.width / 2) + 'px',
-                    'margin-top': -(QueueImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
-                });
+            {
+                'margin-left': -(QueueImageSize.width / 2) + 'px',
+                'margin-top': -(QueueImageSize.height / 2) + 'px',
+                'left': '50%',
+                'top': '50%'
+            });
             $('#rightinner').css('position', 'absolute').css(
-                {
-                    'margin-left': -(VicImagesImageSize.width / 2) + 'px',
-                    'margin-top': -(VicImagesImageSize.height / 2) + 'px', 'left': '50%', 'top': '50%'
-                });
+            {
+                'margin-left': -(VicImagesImageSize.width / 2) + 'px',
+                'margin-top': -(VicImagesImageSize.height / 2) + 'px',
+                'left': '50%',
+                'top': '50%'
+            });
+        }
+
+        function getTimeString(input) {
+            if (input == 0) return "Less than 1 minute ago";
+            var maxScanPeriod = @(ConfigurationManager.AppSettings["maxScanPeriod"]);
+            if (input == maxScanPeriod) return "More than " + (maxScanPeriod / 60) + " hours ago";
+
+            return input + " minutes ago";
+        }
+
+        function getTimeColour(input) {
+            if (input == 0) return "yellow";
+            if (input < 10) return "amber";
+            if (input < 30) return "lessRed";
+            return "red";
         }
     </script>
 }
@@ -49,10 +91,19 @@
 </div>
 <div id="right">
     <div id="rightinner">
-        <div class="title" id="chart2title">
-            Vic Image Counts
+        <div id="vicImage">
+            <div class="title" id="chart2title">
+                Vic Image Counts
+            </div>
+            <img id="chart2" src="//:0" />
         </div>
-        <img id="chart2" src="//:0" />
+        <div id="errorsList">
+            <div class="title" id="chart3title">
+                High Error Occurrences
+            </div>
+            <div id="errorList" style="padding-top: 44px">
+            </div>
+        </div>
     </div>
 </div>
 

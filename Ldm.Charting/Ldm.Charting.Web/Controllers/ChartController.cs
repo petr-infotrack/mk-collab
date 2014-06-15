@@ -1,4 +1,5 @@
-﻿using Ldm.Charting.Data;
+﻿using System.Configuration;
+using Ldm.Charting.Data;
 using Ldm.Charting.Web.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -37,6 +38,7 @@ namespace Ldm.Charting.Web.Controllers
             chart.SaveImage(ms);
             return File(ms.GetBuffer(), @"image/png");
         }
+
         public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000)
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
@@ -72,6 +74,16 @@ namespace Ldm.Charting.Web.Controllers
             IVicImageCountsRepository repo = new VicImageCountsRepository();
             var VicImageCounts = repo.GetVicImageCounts().Select(x => x.Minutes);
             return Json(VicImageCounts);
+        }
+
+        public JsonResult GetErrors()
+        {
+            ILoggingDataRepository repo = new LoggingDataRepository();
+            var allErrorsOverThreshold = repo.GetAllErrorsOverThreshold(
+                int.Parse(ConfigurationManager.AppSettings.Get("loggingCountThreshold")),
+                int.Parse(ConfigurationManager.AppSettings.Get("loggingTimingThreshold")),
+                int.Parse(ConfigurationManager.AppSettings.Get("maxScanPeriod")));
+            return Json(allErrorsOverThreshold);
         }
     }
 
