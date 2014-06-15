@@ -16,8 +16,8 @@
 <body>
     <div>
         @RenderBody()
-        <script type="text/javascript" src="@Url.Content("/Scripts/jquery-2.0.3.min.js")"></script>
-        <script type="text/javascript" src="@Url.Content("/Scripts/emc2-alert-boxes.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/jquery-2.0.3.min.js")"></script>
+        <script type="text/javascript" src="@Url.Content("~/Scripts/emc2-alert-boxes.js")"></script>
         @RenderSection("scripts", required: false)
     </div>
 </body>
