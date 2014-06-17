@@ -45,6 +45,7 @@ namespace Ldm.Charting.Data
                     "and e.SourceComputer like 'mt%' " +
                     "group by e.errorid,e.errormessage, o.OccurenceId " +
                     "having count(o.OccurenceId) >{1} " +
+                    "and max(o.thrownat) > DateADD(SECOND, -30, Current_TimeStamp) " +
                     "order by  firstOccurrence desc"
                     , timePeriodMinutes, numberOfOccurences, maxScanPeriod)).ToList();
                 return allErrorsOverThreshold;
