@@ -35,19 +35,10 @@ namespace Ldm.Charting.Data
         {
             using (var db = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["ldmLogging"].ConnectionString))
             {
-                List<ErrorOcccurences> allErrorsOverThreshold = db.Query<ErrorOcccurences>(string.Format(
-                    "select distinct e.errormessage as errorMessage, " +
-                    "count(o.OccurenceId) as occurrences, " +
-                    "DATEDIFF(mi, min(firstOccurence.thrownat), getdate()) as firstOccurrence " +
-                    "from errors e with (nolock)" +
-                    "inner join occurences o with (nolock) on e.errorid = o.errors_errorid and o.ThrownAt > DateADD(mi, -{0}, Current_TimeStamp) " +
-                    "inner join Occurences firstOccurence with (nolock) on e.errorid = firstOccurence.errors_errorid and firstOccurence.ThrownAt > DateADD(mi, -{2}, Current_TimeStamp) " +
-                    "and e.SourceComputer like 'mt%' " +
-                    "group by e.errorid,e.errormessage, o.OccurenceId " +
-                    "having count(o.OccurenceId) >{1} " +
-                    "and max(o.thrownat) > DateADD(SECOND, -30, Current_TimeStamp) " +
-                    "order by  firstOccurrence desc"
-                    , timePeriodMinutes, numberOfOccurences, maxScanPeriod)).ToList();
+                List<ErrorOcccurences> allErrorsOverThreshold = db.Query<ErrorOcccurences>("Wallboard", 
+                    new { numberOfOccurences, timePeriodMinutes, maxScanPeriod },
+                    commandType: CommandType.StoredProcedure
+                    ).ToList();
                 return allErrorsOverThreshold;
             }
         }
