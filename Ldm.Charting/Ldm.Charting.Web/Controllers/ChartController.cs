@@ -42,7 +42,7 @@ namespace Ldm.Charting.Web.Controllers
         public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000)
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
-
+            IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
             Chart chart = ChartBuilder.BuildChart(SeriesChartType.Bar, width, height);
 
             var currentSeries = chart.Series[0];
@@ -56,7 +56,7 @@ namespace Ldm.Charting.Web.Controllers
             currentSeries.Points.AddXY("FileTrack Logins", repo.GetQueueCount("[FileTrackLoginUpdates]"));
             currentSeries.Points.AddXY("FileTrack Orders", repo.GetQueueCount("[FileTrackOrderUpdates]"));
             currentSeries.Points.AddXY("PENCIL", repo.GetQueueCount("[//PENCIL/OrderUpdateRequestTargetQueue]"));
-            currentSeries.Points.AddXY("PDMSNSW", repo.GetQueueCount("[//PDMSNSW/OrderUpdateRequestTargetQueue]"));
+            currentSeries.Points.AddXY("Maple Order Updates", repoMaple.GetQueueCount("[//Maple/OrderUpdateRequestTargetQueue]"));
 
             // Set 
             var maximum = currentSeries.Points.Select(x => x.YValues.First()).Max();

@@ -11,6 +11,14 @@ namespace Ldm.Charting.Data
 {
     public class QueueCounterRepository : IQueueCounterRepository
     {
+        public QueueCounterRepository()
+        {
+
+        }
+        public QueueCounterRepository(string connectionString)
+        {
+            _db = new System.Data.SqlClient.SqlConnection(connectionString);
+        }
         private readonly IDbConnection _db = new System.Data.SqlClient.SqlConnection(ConfigurationManager.ConnectionStrings["ldmCore"].ConnectionString);
 
         public int GetOrderUpdatesCount(string Identifier)
