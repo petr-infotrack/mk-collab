@@ -55,7 +55,30 @@ namespace Ldm.Charting.Web.Controllers
             currentSeries.Points.AddXY("OfficeExpressIntegration", repo.GetOrderUpdatesCount("WcfReceiver_OfficeExpressIntegrationService"));
             currentSeries.Points.AddXY("FileTrack Logins", repo.GetQueueCount("[FileTrackLoginUpdates]"));
             currentSeries.Points.AddXY("FileTrack Orders", repo.GetQueueCount("[FileTrackOrderUpdates]"));
-            currentSeries.Points.AddXY("PENCIL", repo.GetQueueCount("[//PENCIL/OrderUpdateRequestTargetQueue]"));
+            
+
+            // Set 
+            var maximum = currentSeries.Points.Select(x => x.YValues.First()).Max();
+            chart.ChartAreas[0].AxisY.Maximum = Math.Max(maximum + 10, 150);
+
+            // Save to MemoryStream and pass contents back to View.
+            MemoryStream ms = new MemoryStream();
+            chart.SaveImage(ms);
+            return File(ms.GetBuffer(), @"image/png");
+        }
+        public FileResult CreatePencilQueueCountsChart(int width = 1000, int height = 1000)
+        {
+            IQueueCounterRepository repo = new QueueCounterRepository();
+            IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
+            Chart chart = ChartBuilder.BuildChart(SeriesChartType.Bar, width, height);
+
+            var currentSeries = chart.Series[0];
+
+            // Bind Data
+            currentSeries.Points.AddXY("Pencil OrderToDispatch", repo.GetQueueFromQuery("select count(*) from pencil.dbo.RunQueueOrderToDispatch WITH (NOLOCK) where RequiresAttention = 0"));
+            currentSeries.Points.AddXY("Pencil Forms Building", repo.GetQueueFromQuery("select count(*) from pencil.dbo.RunRequestForm WITH (NOLOCK) where Built = 0"));
+            currentSeries.Points.AddXY("Pencil Automation", repoMaple.GetQueueFromQuery("select count(*) from pencil.dbo.OrderLock WITH (NOLOCK) where UserName = 'Automation'"));
+            currentSeries.Points.AddXY("PENCIL Order Updates", repo.GetQueueCount("[//PENCIL/OrderUpdateRequestTargetQueue]"));
             currentSeries.Points.AddXY("Maple Order Updates", repoMaple.GetQueueCount("[//Maple/OrderUpdateRequestTargetQueue]"));
 
             // Set 
@@ -67,7 +90,7 @@ namespace Ldm.Charting.Web.Controllers
             chart.SaveImage(ms);
             return File(ms.GetBuffer(), @"image/png");
         }
-
+        
         // Test JSON output for Google Charts.
         public JsonResult GetVicImagesChartData()
         {

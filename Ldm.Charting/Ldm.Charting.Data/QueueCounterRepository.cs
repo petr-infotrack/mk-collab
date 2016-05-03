@@ -30,7 +30,10 @@ namespace Ldm.Charting.Data
         {
             return _db.Query<int>(String.Format("SELECT COUNT(*) QueueLength FROM {0} WITH (NOLOCK)", Table)).Single();
         }
-
+        public int GetQueueFromQuery(string Query)
+        {
+            return _db.Query<int>(Query).Single();
+        }
         public int GetOrderUpdatesCountWhere(string Where)
         {
             var query =

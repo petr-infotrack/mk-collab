@@ -11,5 +11,6 @@ namespace Ldm.Charting.Data
         int GetOrderUpdatesCount(string Identifier);
         int GetQueueCount(string Table);
         int GetOrderUpdatesCountWhere(string Where);
+        int GetQueueFromQuery(string Query);
     }
 }

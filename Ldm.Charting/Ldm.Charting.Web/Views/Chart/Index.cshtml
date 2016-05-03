@@ -6,7 +6,13 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
+            $('#generalQueues').show();
+            $('#pencilQueues').hide();
             setInterval(drawCharts, 60000);
+            setInterval(function(){
+                $('#generalQueues').toggle();
+                $('#pencilQueues').toggle();
+            }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
             drawCharts();
         });
 
@@ -15,11 +21,10 @@
             var browserHeight = $(window).height();
             var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
-
             // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
             var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
             var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-
+            var PencilQueueCountsLink = '@Html.Raw(Url.Action("CreatePencilQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("GetErrors")',
@@ -44,10 +49,10 @@
 
             QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
             VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
-
+            PencilQueueCountsLink = PencilQueueCountsLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
             $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
             $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
-
+            $('#chart3').attr('src', PencilQueueCountsLink + '&' + new Date().getTime());
             $('#leftinner').css('position', 'absolute').css(
             {
                 'margin-left': -(QueueImageSize.width / 2) + 'px',
@@ -62,6 +67,7 @@
                 'left': '50%',
                 'top': '50%'
             });
+
         }
 
         function getTimeString(input) {
@@ -82,20 +88,28 @@
 
 <div id="left">
     <div id="leftinner">
-        <div class="title" id="chart1title">
-            Queue Counts
+        <div id="generalQueues">
+            <div class="title" id="chart1title">
+                Queue Counts
+            </div>
+            <img id="chart1" src="//:0" />
         </div>
-        <img id="chart1" src="//:0" />
+        <div id="pencilQueues">
+            <div class="title" id="chart3title">
+                Pencil Queues
+            </div>
+            <img id="chart3" src="//:0" />
+        </div>
     </div>
 </div>
 <div id="right">
     <div id="rightinner">
-        <div id="vicImage">
-            <div class="title" id="chart2title">
-                Vic Image Counts
-            </div>
-            <img id="chart2" src="//:0" />
-        </div>
+            <div id="vicImage">
+                <div class="title" id="chart2title">
+                    Vic Image Counts
+                </div>
+                <img id="chart2" src="//:0" />
+            </div>    
         <div id="errorsList">
             <div class="title" id="chart3title">
                 High Error Occurrences
