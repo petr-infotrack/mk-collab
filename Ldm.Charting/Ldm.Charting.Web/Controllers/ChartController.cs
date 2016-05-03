@@ -75,11 +75,11 @@ namespace Ldm.Charting.Web.Controllers
             var currentSeries = chart.Series[0];
 
             // Bind Data
-            currentSeries.Points.AddXY("Pencil Create", repo.GetQueueFromQuery("select count(*) from [//PENCIL/OrderCreateRequestTargetQueue] WITH (NOLOCK)"));
             currentSeries.Points.AddXY("Pencil OrderToDispatch", repo.GetQueueFromQuery("select count(*) from pencil.dbo.RunQueueOrderToDispatch WITH (NOLOCK) where RequiresAttention = 0"));
             currentSeries.Points.AddXY("Pencil Forms Building", repo.GetQueueFromQuery("select count(*) from pencil.dbo.RunRequestForm WITH (NOLOCK) where Built = 0"));
             currentSeries.Points.AddXY("Pencil Automation", repoMaple.GetQueueFromQuery("select count(*) from pencil.dbo.OrderLock WITH (NOLOCK) where UserName = 'Automation'"));
             currentSeries.Points.AddXY("PENCIL Order Updates", repo.GetQueueCount("[//PENCIL/OrderUpdateRequestTargetQueue]"));
+            currentSeries.Points.AddXY("Pencil Create", repo.GetQueueFromQuery("select count(*) from [//PENCIL/OrderCreateRequestTargetQueue] WITH (NOLOCK)"));
             currentSeries.Points.AddXY("Maple Order Updates", repoMaple.GetQueueCount("[//Maple/OrderUpdateRequestTargetQueue]"));
 
             // Set 
