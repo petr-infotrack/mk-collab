@@ -13,16 +13,24 @@ using System.Web.UI.DataVisualization.Charting;
 
 namespace Ldm.Charting.Web.Controllers
 {
-    public class ChartController : Controller
-    {
+        public class ChartController : Controller
+        {
+        enum AlertImportance
+        {
+            Low  = 500,
+            Medium = 1000,
+            High =  1500
+        }
+    
         public ActionResult Index()
         {
             return View();
         }
 
-        public FileResult CreateVicImagesChart(int width = 1000, int height = 1000)
+        public FileResult CreateVicImagesChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IVicImageCountsRepository repo = new VicImageCountsRepository();
+            IQueueCounterRepository queueCounterRepo = new QueueCounterRepository();
             var VicImageCounts = repo.GetVicImageCounts();
 
             Chart chart = ChartBuilder.BuildChart(SeriesChartType.Line, width, height);
@@ -32,14 +40,37 @@ namespace Ldm.Charting.Web.Controllers
             {
                 chart.Series[0].Points.AddY(ImageCount.Minutes);
             }
+            // Monitor board color changes based upon order update queue accordingly 
+            chart.BackColor = Color.FromName(colour);
+            chart.ChartAreas.ToList().ForEach(m => m.BackColor = Color.FromName(colour));
 
             // Save to MemoryStream and pass contents back to View.
             MemoryStream ms = new MemoryStream();
             chart.SaveImage(ms);
             return File(ms.GetBuffer(), @"image/png");
         }
+        [AllowAnonymous]
+        public JsonResult BackGroundColor()
+        {
+            IQueueCounterRepository repo = new QueueCounterRepository();
+            var orderUpdateQueueLength = (repo.GetOrderUpdatesCountWhere(@"Identifier NOT LIKE '%WcfReceiver_OfficeExpressIntegrationService%'") > 0 ? repo.GetOrderUpdatesCountWhere(@"Identifier NOT LIKE '%WcfReceiver_OfficeExpressIntegrationService%'") : 0) ;
+            var color = "Black";
 
-        public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000)
+            if (orderUpdateQueueLength > (int)AlertImportance.Low)
+                color = "Gold";
+
+            if (orderUpdateQueueLength > (int)AlertImportance.Medium)
+                color = "Orange";
+
+            if (orderUpdateQueueLength > (int)AlertImportance.High)
+                color = "Tomato";
+
+            var chartAlert = new ChartAlert() { ChartColour = color, OrderUpdatesRows = orderUpdateQueueLength.ToString() };
+            return Json(chartAlert, JsonRequestBehavior.AllowGet); 
+                
+        }
+        
+        public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
             IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
@@ -55,7 +86,10 @@ namespace Ldm.Charting.Web.Controllers
             currentSeries.Points.AddXY("OfficeExpressIntegration", repo.GetOrderUpdatesCount("WcfReceiver_OfficeExpressIntegrationService"));
             currentSeries.Points.AddXY("FileTrack Logins", repo.GetQueueCount("[FileTrackLoginUpdates]"));
             currentSeries.Points.AddXY("FileTrack Orders", repo.GetQueueCount("[FileTrackOrderUpdates]"));
-            
+
+            // Monitor board color changes based upon order update queue accordingly 
+             chart.BackColor = Color.FromName(colour);
+             chart.ChartAreas.ToList().ForEach(m => m.BackColor = Color.FromName(colour));      
 
             // Set 
             var maximum = currentSeries.Points.Select(x => x.YValues.First()).Max();
@@ -66,7 +100,7 @@ namespace Ldm.Charting.Web.Controllers
             chart.SaveImage(ms);
             return File(ms.GetBuffer(), @"image/png");
         }
-        public FileResult CreatePencilQueueCountsChart(int width = 1000, int height = 1000)
+        public FileResult CreatePencilQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
             IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
@@ -81,6 +115,10 @@ namespace Ldm.Charting.Web.Controllers
             currentSeries.Points.AddXY("PENCIL Order Updates", repo.GetQueueCount("[//PENCIL/OrderUpdateRequestTargetQueue]"));
             currentSeries.Points.AddXY("Pencil Create", repo.GetQueueFromQuery("select count(*) from [//PENCIL/OrderCreateRequestTargetQueue] WITH (NOLOCK)"));
             currentSeries.Points.AddXY("Maple Order Updates", repoMaple.GetQueueCount("[//Maple/OrderUpdateRequestTargetQueue]"));
+
+            // Monitor board color changes based upon order update queue accordingly 
+            chart.BackColor = Color.FromName(colour);
+            chart.ChartAreas.ToList().ForEach(m => m.BackColor = Color.FromName(colour));
 
             // Set 
             var maximum = currentSeries.Points.Select(x => x.YValues.First()).Max();

@@ -2,29 +2,44 @@
 @{
     ViewBag.Title = "Ldm Charts";
 }
-
 @section Scripts {
     <script>
         $(document).ready(function() {
             $('#generalQueues').show();
             $('#pencilQueues').hide();
-            setInterval(drawCharts, 60000);
+            setInterval(DrawChartIt, 60000);
             setInterval(function(){
                 $('#generalQueues').toggle();
                 $('#pencilQueues').toggle();
             }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
-            drawCharts();
+
+            var GlobalColour = "Black";
+            var OrderUpdatesRows = "";
+
+            function DrawChartIt(){
+                $.ajax({
+                    url: '@Html.Raw(Url.Action("BackGroundColor"))',
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(data) {
+                        GlobalColour = data.ChartColour;
+                        OrderUpdatesRows = data.OrderUpdatesRows;
+                        drawCharts(GlobalColour, OrderUpdatesRows);
+                    }
+                });
+            }
+
         });
 
-        function drawCharts() {
+        function drawCharts(chartColour, orderUpdatesRows) {
             var browserWidth = $(window).width();
             var browserHeight = $(window).height();
             var QueueImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             var VicImagesImageSize = { width: Math.ceil(browserWidth / 2), height: Math.ceil(browserHeight) - 100 };
             // Wrapped in Html.Raw as the Action link contains escaped ampersands in <script> blocks, which is not what we want.
-            var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-            var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight" }))';
-            var PencilQueueCountsLink = '@Html.Raw(Url.Action("CreatePencilQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight" }))';
+            var QueueCountsLink = '@Html.Raw(Url.Action("CreateQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight", colour = "imageColor" }))';
+            var VicImagesLink = '@Html.Raw(Url.Action("CreateVicImagesChart", null, new { width = "imageWidth", height = "imageHeight", colour = "imageColor" }))';
+            var PencilQueueCountsLink = '@Html.Raw(Url.Action("CreatePencilQueueCountsChart", null, new { width = "imageWidth", height = "imageHeight", colour = "imageColor" }))';
             $.ajax({
                 type: 'POST',
                 url: '@Url.Action("GetErrors")',
@@ -47,12 +62,15 @@
                 }
             });
 
-            QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height);
-            VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
-            PencilQueueCountsLink = PencilQueueCountsLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height);
+            QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height).replace('imageColor', chartColour);
+            VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height).replace('imageColor', chartColour);
+            PencilQueueCountsLink = PencilQueueCountsLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height).replace('imageColor', chartColour);
             $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
             $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
             $('#chart3').attr('src', PencilQueueCountsLink + '&' + new Date().getTime());
+            $('#left').css('background-color', chartColour).css( {'top': '6%'});
+            $('#right').css('background-color', chartColour).css( {'top': '6%'});
+
             $('#leftinner').css('position', 'absolute').css(
             {
                 'margin-left': -(QueueImageSize.width / 2) + 'px',
@@ -68,6 +86,12 @@
                 'top': '50%'
             });
 
+            $('#OrderUpdateAttention').css('background-color', chartColour);
+            $('#OrderUpdateAttention').text('Order Updates Require Attention! Current Row Number: '+ orderUpdatesRows);        
+            if(orderUpdatesRows > 500)
+                $('#OrderUpdateAttention').show();
+            else
+                $('#OrderUpdateAttention').hide();
         }
 
         function getTimeString(input) {
@@ -83,40 +107,41 @@
             if (input < 10) return "lessRed";
             return "red";
         }
+       
     </script>
 }
-
-<div id="left">
-    <div id="leftinner">
-        <div id="generalQueues">
-            <div class="title" id="chart1title">
-                Queue Counts
-            </div>
-            <img id="chart1" src="//:0" />
-        </div>
-        <div id="pencilQueues">
-            <div class="title" id="chart3title">
-                Pencil Queues
-            </div>
-            <img id="chart3" src="//:0" />
-        </div>
-    </div>
+<div id="OrderUpdateAttention" style='font-size:35px;font-family:arial; padding-left: 500px;padding-top:20px; font-weight: bold;'>
+    <span></span> 
 </div>
-<div id="right">
-    <div id="rightinner">
-            <div id="vicImage">
-                <div class="title" id="chart2title">
-                Asic Document Return Time
+        <div id="left">
+            <div id="leftinner">
+                <div id="generalQueues">
+                    <div class="title" id="chart1title">
+                        Queue Counts
+                    </div>
+                    <img id="chart1" src="//:0" />
                 </div>
-                <img id="chart2" src="//:0" />
-            </div>    
-        <div id="errorsList">
-            <div class="title" id="chart3title">
-                High Error Occurrences
-            </div>
-            <div id="errorList" style="padding-top: 44px">
+                <div id="pencilQueues">
+                    <div class="title" id="chart3title">
+                        Pencil Queues
+                    </div>
+                    <img id="chart3" src="//:0" />
+                </div>
             </div>
         </div>
-    </div>
-</div>
-
+        <div id="right">
+            <div id="rightinner">
+                <div id="vicImage">
+                    <div class="title" id="chart2title">
+                        Asic Document Return Time
+                    </div>
+                    <img id="chart2" src="//:0" />
+                </div>
+                <div id="errorsList">
+                    <div class="title" id="chart3title">
+                        High Error Occurrences
+                    </div>
+                    <div id="errorList" style="padding-top: 44px"></div>    
+                </div>
+            </div>
+        </div>
