@@ -13,6 +13,8 @@
                 $('#pencilQueues').toggle();
             }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
 
+            DrawChartIt();
+
             var GlobalColour = "Black";
             var OrderUpdatesRows = "";
 
@@ -87,7 +89,7 @@
             });
 
             $('#OrderUpdateAttention').css('background-color', chartColour);
-            $('#OrderUpdateAttention').text('Order Updates Require Attention! Current Row Number: '+ orderUpdatesRows);        
+            $('#OrderUpdateAttention').text('Order Updates Requires Attention! Count: '+ orderUpdatesRows);        
             if(orderUpdatesRows > 500)
                 $('#OrderUpdateAttention').show();
             else
@@ -110,7 +112,7 @@
        
     </script>
 }
-<div id="OrderUpdateAttention" style='font-size:35px;font-family:arial; padding-left: 500px;padding-top:20px; font-weight: bold;'>
+<div id="OrderUpdateAttention" style='font-size:35px;font-family:arial; text-align:center;padding-top:20px; font-weight: bold;'>
     <span></span> 
 </div>
         <div id="left">

@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.UI.DataVisualization.Charting;
 
@@ -57,13 +56,13 @@ namespace Ldm.Charting.Web.Controllers
             var color = "Black";
 
             if (orderUpdateQueueLength > (int)AlertImportance.Low)
-                color = "Gold";
+                color = "Moccasin";
 
             if (orderUpdateQueueLength > (int)AlertImportance.Medium)
-                color = "Orange";
+                color = "SandyBrown";
 
             if (orderUpdateQueueLength > (int)AlertImportance.High)
-                color = "Tomato";
+                color = "Crimson";
 
             var chartAlert = new ChartAlert() { ChartColour = color, OrderUpdatesRows = orderUpdateQueueLength.ToString() };
             return Json(chartAlert, JsonRequestBehavior.AllowGet); 
