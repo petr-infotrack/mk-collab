@@ -17,8 +17,8 @@ namespace Ldm.Charting.Web.Controllers
         enum AlertImportance
         {
             Low  = 500,
-            Medium = 1000,
-            High =  1500
+            Medium = 750,
+            High =  1000
         }
     
         public ActionResult Index()
@@ -56,13 +56,13 @@ namespace Ldm.Charting.Web.Controllers
             var color = "Black";
 
             if (orderUpdateQueueLength > (int)AlertImportance.Low)
-                color = "Moccasin";
+                color = "Goldenrod";
 
             if (orderUpdateQueueLength > (int)AlertImportance.Medium)
-                color = "SandyBrown";
+                color = "DarkOrange";
 
             if (orderUpdateQueueLength > (int)AlertImportance.High)
-                color = "Crimson";
+                color = "Red";
 
             var chartAlert = new ChartAlert() { ChartColour = color, OrderUpdatesRows = orderUpdateQueueLength.ToString() };
             return Json(chartAlert, JsonRequestBehavior.AllowGet); 
