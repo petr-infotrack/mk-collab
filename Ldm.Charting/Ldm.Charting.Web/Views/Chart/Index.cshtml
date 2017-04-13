@@ -7,13 +7,11 @@
         $(document).ready(function() {
             $('#generalQueues').show();
             $('#pencilQueues').hide();
-           // $('#websitePerfomance').hide();
             $('#vicImage').show();
             setInterval(DrawChartIt, 60000);
             setInterval(function(){
                 $('#generalQueues').toggle();
                 $('#pencilQueues').toggle();
-               // $('#websitePerfomance').toggle();
                 $('#vicImage').toggle();
             }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
 
