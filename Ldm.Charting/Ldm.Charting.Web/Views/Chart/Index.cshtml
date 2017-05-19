@@ -7,8 +7,9 @@
         $(document).ready(function() { 
             var i = 0;
             $('#vicImage').show();
-            $('#websitePerformance1').hide();
-            $('#websitePerformance2').hide();
+            //kabana has to be visible to load the graph or will cause error 
+            $('#websitePerformance1').show();
+            $('#websitePerformance2').show();
             $('#generalQueues').show();
             $('#pencilQueues').hide();
             setInterval(DrawChartIt, 60000);
@@ -179,15 +180,15 @@
                 <div class="title" id="nswvic">
                     Website Performance
                 </div>
-                <div id="iframeContainer">
-                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/dashboard-%231?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A427'%2Cdisplay%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
+                <div class="iframeContainer">
+                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/dashboard-%231?embed=true&_g=(refreshInterval%3A(display%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
                 </div>
             </div>
             <div id="websitePerformance2">
                 <div class="title" id="otherFive">
                     Website Performance
                 </div>
-                <div id="iframeContainer">
+                <div class="iframeContainer">
                     <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/search-page-performance?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A295'%2Cdisplay%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
                 </div>
             </div>

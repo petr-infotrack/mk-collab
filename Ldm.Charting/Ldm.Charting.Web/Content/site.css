@@ -74,7 +74,7 @@ iframe
 {
     border:0px;
 }
-#iframeContainer {
+.iframeContainer {
 padding:20px;
 padding-top:27px;
 }
