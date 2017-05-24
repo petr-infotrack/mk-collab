@@ -22,7 +22,7 @@
                 i++;
                 rotate(i);
             },@System.Configuration.ConfigurationManager.AppSettings["performanceAsicSwitch"]);
-            DrawChartIt();
+            setTimeout(function(){DrawChartIt();}, 10000);            
 
             var GlobalColour = "Black";
             var OrderUpdatesRows = "";
@@ -46,10 +46,9 @@
                 switch (remind) {
                     case 0:
                         $('#vicImage').hide();
-                        $('#websitePerformance1').show();
+                        $('#websitePerformance2').hide();
                         break;
                     case 1:
-                        $('#websitePerformance1').hide();
                         $('#websitePerformance2').show();
                         break;
                     case 2:
@@ -75,10 +74,8 @@
                 url: '@Url.Action("GetErrors")',
                 success: function(data) {
                     if ($(data).length > 0) {
-                        $('#noError').hide();
                         $('#errorsList').show();
                     } else {
-                        $('#noError').show();
                         $('#errorsList').hide();
                     }
 
@@ -169,20 +166,18 @@
 </div>
 <div id="right">
     <div id="rightinner">
+        <div id="errorsList" style="height:1080px">
+            <div class="title" id="chart3title">
+                High Error Occurrences
+            </div>
+            <div id="errorList" style="padding-top: 44px"></div>
+        </div>
         <div id="noError">
             <div id="vicImage">
                 <div class="title" id="chart2title">
                     Asic Document Return Time
                 </div>
                 <img id="chart2" src="//:0" />
-            </div>
-            <div id="websitePerformance1">
-                <div class="title" id="nswvic">
-                    Website Performance
-                </div>
-                <div class="iframeContainer">
-                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/dashboard-%231?embed=true&_g=(refreshInterval%3A(display%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
-                </div>
             </div>
             <div id="websitePerformance2">
                 <div class="title" id="otherFive">
@@ -192,12 +187,14 @@
                     <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/search-page-performance?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A295'%2Cdisplay%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
                 </div>
             </div>
-        </div>
-        <div id="errorsList">
-            <div class="title" id="chart3title">
-                High Error Occurrences
+            <div id="websitePerformance1">
+                <div class="title" id="nswvic">
+                    Website Performance
+                </div>
+                <div class="iframeContainer">
+                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/dashboard-%231?embed=true&_g=(refreshInterval%3A(display%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
+                </div>
             </div>
-            <div id="errorList" style="padding-top: 44px"></div>
         </div>
     </div>
 </div>
