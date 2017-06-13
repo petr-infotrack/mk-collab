@@ -26,7 +26,7 @@ namespace Ldm.Charting.Web.Controllers
             return View();
         }
 
-        public FileResult CreateVicImagesChart(int width = 1000, int height = 1000, string colour = "Black")
+        public string CreateVicImagesChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IVicImageCountsRepository repo = new VicImageCountsRepository();
             IQueueCounterRepository queueCounterRepo = new QueueCounterRepository();
@@ -46,7 +46,8 @@ namespace Ldm.Charting.Web.Controllers
             // Save to MemoryStream and pass contents back to View.
             MemoryStream ms = new MemoryStream();
             chart.SaveImage(ms);
-            return File(ms.GetBuffer(), @"image/png");
+            byte[] imageBytes = ms.ToArray();
+            return Convert.ToBase64String(imageBytes);
         }
         [AllowAnonymous]
         public JsonResult BackGroundColor()
@@ -69,7 +70,7 @@ namespace Ldm.Charting.Web.Controllers
                 
         }
         
-        public FileResult CreateQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
+        public string CreateQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
             IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
@@ -97,9 +98,10 @@ namespace Ldm.Charting.Web.Controllers
             // Save to MemoryStream and pass contents back to View.
             MemoryStream ms = new MemoryStream();
             chart.SaveImage(ms);
-            return File(ms.GetBuffer(), @"image/png");
+            byte[] imageBytes = ms.ToArray();
+            return Convert.ToBase64String(imageBytes);
         }
-        public FileResult CreatePencilQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
+        public string CreatePencilQueueCountsChart(int width = 1000, int height = 1000, string colour = "Black")
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
             IQueueCounterRepository repoMaple = new QueueCounterRepository(ConfigurationManager.ConnectionStrings["maple"].ConnectionString);
@@ -126,7 +128,8 @@ namespace Ldm.Charting.Web.Controllers
             // Save to MemoryStream and pass contents back to View.
             MemoryStream ms = new MemoryStream();
             chart.SaveImage(ms);
-            return File(ms.GetBuffer(), @"image/png");
+            byte[] imageBytes = ms.ToArray();
+            return Convert.ToBase64String(imageBytes);
         }
         
         // Test JSON output for Google Charts.
