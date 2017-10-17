@@ -4,16 +4,25 @@
 }
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function() { 
+            var i = 0;
+            $('#vicImage').show();
+            //kabana has to be visible to load the graph or will cause error 
+            $('#websitePerformance1').show();
+            $('#websitePerformance2').show();
             $('#generalQueues').show();
             $('#pencilQueues').hide();
             setInterval(DrawChartIt, 60000);
             setInterval(function(){
                 $('#generalQueues').toggle();
                 $('#pencilQueues').toggle();
-            }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
 
-            DrawChartIt();
+            }, @System.Configuration.ConfigurationManager.AppSettings["queueChartSwitchingTime"]);
+            setInterval(function(){
+                i++;
+                rotate(i);
+            },@System.Configuration.ConfigurationManager.AppSettings["performanceAsicSwitch"]);
+            setTimeout(function(){DrawChartIt();}, 5000);            
 
             var GlobalColour = "Black";
             var OrderUpdatesRows = "";
@@ -25,10 +34,28 @@
                     dataType: "json",
                     success: function(data) {
                         GlobalColour = data.ChartColour;
+                        if(GlobalColour == "Black")
+                            GlobalColour = "#272727"
                         OrderUpdatesRows = data.OrderUpdatesRows;
                         drawCharts(GlobalColour, OrderUpdatesRows);
                     }
                 });
+            }
+            function rotate(i){
+                var remind = i%3
+                switch (remind) {
+                    case 0:
+                        $('#vicImage').hide();
+                        $('#websitePerformance2').hide();
+                        break;
+                    case 1:
+                        $('#websitePerformance2').show();
+                        break;
+                    case 2:
+                        $('#vicImage').show();
+                        $('#websitePerformance2').hide();
+                        break;
+                }
             }
 
         });
@@ -47,10 +74,8 @@
                 url: '@Url.Action("GetErrors")',
                 success: function(data) {
                     if ($(data).length > 0) {
-                        $('#vicImage').hide();
                         $('#errorsList').show();
                     } else {
-                        $('#vicImage').show();
                         $('#errorsList').hide();
                     }
 
@@ -67,8 +92,15 @@
             QueueCountsLink = QueueCountsLink.replace('imageWidth', QueueImageSize.width).replace('imageHeight', QueueImageSize.height).replace('imageColor', chartColour);
             VicImagesLink = VicImagesLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height).replace('imageColor', chartColour);
             PencilQueueCountsLink = PencilQueueCountsLink.replace('imageWidth', VicImagesImageSize.width).replace('imageHeight', VicImagesImageSize.height).replace('imageColor', chartColour);
-            $('#chart1').attr('src', QueueCountsLink + '&' + new Date().getTime());
-            $('#chart2').attr('src', VicImagesLink + '&' + new Date().getTime());
+            $.get(QueueCountsLink, function (rawImageData) {
+                $("#chart1").attr("src","data:image/png;base64," + rawImageData);
+            });
+            $.get(VicImagesLink, function (rawImageData) {
+                $("#chart2").attr("src","data:image/png;base64," + rawImageData);
+            });
+            $.get(PencilQueueCountsLink, function (rawImageData) {
+                $("#chart3").attr("src","data:image/png;base64," + rawImageData);
+            });
             $('#chart3').attr('src', PencilQueueCountsLink + '&' + new Date().getTime());
             $('#left').css('background-color', chartColour).css( {'top': '6%'});
             $('#right').css('background-color', chartColour).css( {'top': '6%'});
@@ -90,7 +122,7 @@
             });
 
             $('#OrderUpdateAttention').css('background-color', chartColour);
-            $('#OrderUpdateAttention').text('Order Updates Requires Attention! Count: '+ orderUpdatesRows);        
+            $('#OrderUpdateAttention').text('Order Updates Requires Attention! Count: '+ orderUpdatesRows);
             if(orderUpdatesRows > 500)
                 $('#OrderUpdateAttention').show();
             else
@@ -110,41 +142,66 @@
             if (input < 10) return "lessRed";
             return "red";
         }
-       
+        setTimeout(function(){
+            console.log("time out");
+            iframeSrc =  $("iframe").html();
+            iframeSrc.replace("#272727","black");
+        },10000)
+
+
+
     </script>
 }
 <div id="OrderUpdateAttention" style='font-size:35px;font-family:arial; text-align:center;padding-top:20px; font-weight: bold;'>
-    <span></span> 
+    <span></span>
 </div>
-        <div id="left">
-            <div id="leftinner">
-                <div id="generalQueues">
-                    <div class="title" id="chart1title">
-                        Queue Counts
-                    </div>
-                    <img id="chart1" src="//:0" />
+<div id="left">
+    <div id="leftinner">
+        <div id="generalQueues">
+            <div class="title" id="chart1title">
+                Queue Counts
+            </div>
+            <img id="chart1" src="//:0" />
+        </div>
+        <div id="pencilQueues">
+            <div class="title" id="chart3title">
+                Pencil Queues
+            </div>
+            <img id="chart3" src="//:0" />
+        </div>
+    </div>
+</div>
+<div id="right">
+    <div id="rightinner">
+        <div id="errorsList" style="height:1080px">
+            <div class="title" id="chart3title">
+                High Error Occurrences
+            </div>
+            <div id="errorList" style="padding-top: 44px"></div>
+        </div>
+        <div id="noError">
+            <div id="vicImage">
+                <div class="title" id="chart2title">
+                    Asic Document Return Time
                 </div>
-                <div id="pencilQueues">
-                    <div class="title" id="chart3title">
-                        Pencil Queues
-                    </div>
-                    <img id="chart3" src="//:0" />
+                <img id="chart2" src="//:0" />
+            </div>
+            <div id="websitePerformance2">
+                <div class="title" id="otherFive">
+                    Website Performance
+                </div>
+                <div class="iframeContainer">
+                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/search-page-performance?embed=true&_g=(refreshInterval%3A('%24%24hashKey'%3A'object%3A295'%2Cdisplay%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
+                </div>
+            </div>
+            <div id="websitePerformance1">
+                <div class="title" id="nswvic">
+                    Website Performance
+                </div>
+                <div class="iframeContainer">
+                    <iframe src="http://search-auaws-metrics-prod-shtlpsnw2kdw6tmpazoeemhskq.ap-southeast-2.es.amazonaws.com/_plugin/kibana/app/kibana#/dashboard/dashboard-%231?embed=true&_g=(refreshInterval%3A(display%3A'1%20minute'%2Cpause%3A!f%2Csection%3A2%2Cvalue%3A60000)%2Ctime%3A(from%3Anow-2h%2Cinterval%3Aauto%2Cmode%3Aquick%2Ctimezone%3AAustralia%2FSydney%2Cto%3Anow))" height="930" width="100%"></iframe>
                 </div>
             </div>
         </div>
-        <div id="right">
-            <div id="rightinner">
-                <div id="vicImage">
-                    <div class="title" id="chart2title">
-                        Asic Document Return Time
-                    </div>
-                    <img id="chart2" src="//:0" />
-                </div>
-                <div id="errorsList">
-                    <div class="title" id="chart3title">
-                        High Error Occurrences
-                    </div>
-                    <div id="errorList" style="padding-top: 44px"></div>    
-                </div>
-            </div>
-        </div>
+    </div>
+</div>

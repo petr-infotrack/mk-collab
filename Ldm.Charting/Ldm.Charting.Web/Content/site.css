@@ -66,3 +66,15 @@ body
     right: 0%;
     bottom: 0%;
 }
+#rightinner
+{
+    width:98%;
+}
+iframe 
+{
+    border:0px;
+}
+.iframeContainer {
+padding:20px;
+padding-top:27px;
+}
