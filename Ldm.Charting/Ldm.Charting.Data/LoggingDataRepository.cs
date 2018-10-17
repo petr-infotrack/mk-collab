@@ -27,7 +27,7 @@ namespace Ldm.Charting.Data
                     commandType: CommandType.StoredProcedure
                 ));
             }
-            
+
             try
             {
                 var elasticSearchErrors = GetElasticSearchErrors(numberOfOccurences, timePeriodMinutes, maxScanPeriod);
@@ -127,7 +127,6 @@ namespace Ldm.Charting.Data
             {
                 return group.First().ErrorMessage;
             }
-        }
-        
+        }        
     }
 }
