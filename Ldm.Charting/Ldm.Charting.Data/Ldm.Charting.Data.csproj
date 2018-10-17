@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="ErrorOccurrences.cs" />
     <Compile Include="ElasticClientSingleton.cs" />
+    <Compile Include="LdmAlertDataRepository.cs" />
     <Compile Include="LoggingDataRepository.cs" />
     <Compile Include="IQueueCounterRepository.cs" />
     <Compile Include="IVicImageCountsRepository.cs" />

@@ -142,12 +142,25 @@ namespace Ldm.Charting.Web.Controllers
 
         public JsonResult GetErrors()
         {
-            ILoggingDataRepository repo = new LoggingDataRepository();
-            var allErrorsOverThreshold = repo.GetAllErrorsOverThreshold(
-                int.Parse(ConfigurationManager.AppSettings.Get("loggingCountThreshold")),
-                int.Parse(ConfigurationManager.AppSettings.Get("loggingTimingThreshold")),
-                int.Parse(ConfigurationManager.AppSettings.Get("maxScanPeriod")));
-            return Json(allErrorsOverThreshold);
+            // TODO: if more ILoggingDataRepository object get added, implement the factory pattern 
+            List<ErrorOcccurences> errors = new List<ErrorOcccurences>();
+            errors.AddRange(
+                new LoggingDataRepository().GetAllErrorsOverThreshold(
+                    int.Parse(ConfigurationManager.AppSettings.Get("loggingCountThreshold")),
+                    int.Parse(ConfigurationManager.AppSettings.Get("loggingTimingThreshold")),
+                    int.Parse(ConfigurationManager.AppSettings.Get("maxScanPeriod"))
+                )
+            );
+
+            errors.AddRange(
+                new LdmAlertDataRepository().GetAllErrorsOverThreshold(
+                    int.Parse(ConfigurationManager.AppSettings.Get("loggingCountThreshold")),
+                    int.Parse(ConfigurationManager.AppSettings.Get("loggingLDMAlertTimingThreshold")),
+                    0
+                )
+            );
+
+            return Json(errors);
         }
     }
 
