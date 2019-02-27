@@ -13,9 +13,16 @@ namespace Ldm.Charting.Data
     {
         List<ErrorOcccurences> GetAllErrorsOverThreshold(int numberOfOccurences, int timePeriodMinutes, int maxScanPeriod);
     }
-    
+
     public class LoggingDataRepository : ILoggingDataRepository
     {
+        private static readonly HashSet<string> EligibleEnvironements = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+            "Production",
+            "Live",
+            "Production-AU",
+            "Prod"
+        };
+
         public List<ErrorOcccurences> GetAllErrorsOverThreshold(int numberOfOccurences, int timePeriodMinutes, int maxScanPeriod)
         {
             var errorsOverThreshold = new List<ErrorOcccurences>();
@@ -65,7 +72,8 @@ namespace Ldm.Charting.Data
             if (searchResponse != null && searchResponse.Documents != null)
             {
                 response = searchResponse.Documents
-                    .Where(d => d.Fields.Environment == null || !d.Fields.Environment.Equals("DEVELOPMENT", StringComparison.OrdinalIgnoreCase))
+                    .Where(d => d.Fields.Environment == null
+                    || EligibleEnvironements.Contains(d.Fields.Environment))
                     .GroupBy(d => d.ErrorMessage)
                     .Where(g => g.Any(i => i.Timestamp > DateTime.Now.AddMinutes((timePeriodMinutes * -1))) // where there has been at least one occurrence in the past [timePeriodMinutes] minutes
                         && g.Count() >= numberOfOccurences // and where there have been at least [numberOfOccurences] occurrences
