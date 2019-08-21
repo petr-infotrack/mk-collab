@@ -23,8 +23,8 @@ namespace Ldm.Charting.Web.Controllers
 
         enum PencilAlertImportance
         {
-            Low = 300,
-            Medium = 600,
+            Low = 200,
+            Medium = 500,
             High = 1000
         }
 
