@@ -20,7 +20,14 @@ namespace Ldm.Charting.Web.Controllers
             Medium = 750,
             High =  1000
         }
-    
+
+        enum PencilAlertImportance
+        {
+            Low = 300,
+            Medium = 600,
+            High = 1000
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -54,16 +61,21 @@ namespace Ldm.Charting.Web.Controllers
         {
             IQueueCounterRepository repo = new QueueCounterRepository();
             var orderUpdateQueueLength = (repo.GetOrderUpdatesCountWhere(@"Identifier NOT LIKE '%WcfReceiver_OfficeExpressIntegrationService%'") > 0 ? repo.GetOrderUpdatesCountWhere(@"Identifier NOT LIKE '%WcfReceiver_OfficeExpressIntegrationService%'") : 0) ;
+            var pencilOrderUpdateQLength = repo.GetPencilOrderUpdateCount();
+            var pencilCreateUpdateQLength = repo.GetPencilCreateUpdateCount();
+
             var color = "Black";
 
-            if (orderUpdateQueueLength > (int)AlertImportance.Low)
+            if (orderUpdateQueueLength > (int)AlertImportance.Low || pencilOrderUpdateQLength > (int) PencilAlertImportance.Low || pencilCreateUpdateQLength > (int)PencilAlertImportance.Low)
                 color = "Goldenrod";
 
-            if (orderUpdateQueueLength > (int)AlertImportance.Medium)
+            if (orderUpdateQueueLength > (int)AlertImportance.Medium || pencilOrderUpdateQLength > (int)PencilAlertImportance.Medium || pencilCreateUpdateQLength > (int)PencilAlertImportance.Medium)
                 color = "DarkOrange";
 
-            if (orderUpdateQueueLength > (int)AlertImportance.High)
+            if (orderUpdateQueueLength > (int)AlertImportance.High || pencilOrderUpdateQLength > (int)PencilAlertImportance.High || pencilCreateUpdateQLength > (int)PencilAlertImportance.High)
                 color = "Red";
+
+
 
             var chartAlert = new ChartAlert() { ChartColour = color, OrderUpdatesRows = orderUpdateQueueLength.ToString() };
             return Json(chartAlert, JsonRequestBehavior.AllowGet); 

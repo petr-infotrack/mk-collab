@@ -12,5 +12,7 @@ namespace Ldm.Charting.Data
         int GetQueueCount(string Table);
         int GetOrderUpdatesCountWhere(string Where);
         int GetQueueFromQuery(string Query);
+        int GetPencilOrderUpdateCount();
+        int GetPencilCreateUpdateCount();
     }
 }

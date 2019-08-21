@@ -40,5 +40,17 @@ namespace Ldm.Charting.Data
                 String.Format("SELECT COUNT(*) QueueLength FROM ldmcore.dbo.orderupdates WITH (NOLOCK) WHERE {0}", Where);
             return _db.Query<int>(query).Single();
         }
+
+        public int GetPencilOrderUpdateCount()
+        {
+            var query ="SELECT COUNT(*) QueueLength FROM [LdmCore].[dbo].[//PENCIL/OrderUpdateRequestTargetQueue] WITH(NOLOCK)";
+            return _db.Query<int>(query).Single();
+        }
+
+        public int GetPencilCreateUpdateCount()
+        {
+            var query = "SELECT COUNT(*) QueueLength FROM [LdmCore].[dbo].[//PENCIL/OrderCreateRequestTargetQueue] WITH(NOLOCK)";
+            return _db.Query<int>(query).Single();
+        }
     }
 }
