@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="1. Presentation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AlertsAdmin.Data\AlertsAdmin.Data.csproj" />
+    <ProjectReference Include="..\AlertsAdmin.Domain\AlertsAdmin.Domain.csproj" />
+    <ProjectReference Include="..\AlertsAdmin.Service\AlertsAdmin.Service.csproj" />
+  </ItemGroup>
+
+
+
+</Project>

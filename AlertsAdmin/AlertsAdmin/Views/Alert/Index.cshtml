@@ -1,0 +1,9 @@
+﻿@model AlertViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+@{await Html.RenderPartialAsync("_AlertGrid.cshtml", Model);}
