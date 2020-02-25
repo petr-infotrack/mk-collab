@@ -11,7 +11,7 @@ namespace AlertsAdmin.Data
 {
     public class MessageRepository : IAlertRepository
     {
-        private static IEnumerable<MessageType> _alets = new List<MessageType>
+        private static IEnumerable<MessageType> _alerts = new List<MessageType>
         {
             new MessageType{Id=1,Template= "THIS IS ALERT 1", Level= AlertLevel.Information },
             new MessageType{Id=2,Template= "THIS IS ALERT 2", Level= AlertLevel.Error},
@@ -41,7 +41,7 @@ namespace AlertsAdmin.Data
         public async Task<IEnumerable<MessageType>> GetAlertsAsync(Func<MessageType, bool> predicate = null)
         {
             return await Task.Run(() =>
-                _alets.Where(predicate ?? (s => true)).ToList()
+                _alerts.Where(predicate ?? (s => true)).ToList()
             );
         }
     }
