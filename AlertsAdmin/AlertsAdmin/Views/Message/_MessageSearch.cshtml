@@ -1,0 +1,33 @@
+﻿@model AlertsAdmin.Domain.Models.MessageSearchOptions
+<form asp-controller="Message" asp-action="Search" class="form-inline">
+    <div class="form-group">
+        <label for="messageTemplate">Template</label>
+        <input class="form-control" type="text" asp-for="MessageTemplate" />
+    </div>
+    <div class="form-group">
+        <label for="levels">Level</label>
+        <select class="selectpicker" multiple
+                asp-for="Levels" data-style="rounded-pill shadow-sm"
+               asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertLevel>()">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="priority">Priority</label>
+        <select class="selectpicker" multiple
+                asp-for="Priorities" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertPriority>()">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="notification">Notification</label>
+        <select class="selectpicker" multiple
+                asp-for="Notifications" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertNotification>()">
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="defaultStatus">DefaultStatus</label>
+        <select class="selectpicker" multiple
+                asp-for="DefaultStatuses" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertStatus>()">
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>

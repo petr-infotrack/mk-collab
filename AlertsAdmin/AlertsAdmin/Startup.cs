@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Data;
+using AlertsAdmin.Service.Search;
 
 namespace AlertsAdmin
 {
@@ -26,7 +27,8 @@ namespace AlertsAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IAlertRepository, AlertRepository>();
+            services.AddTransient<IAlertRepository, MessageRepository>();
+            services.AddTransient<IMessageSearch, MessageSearch>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
