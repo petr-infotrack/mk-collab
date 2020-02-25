@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using AlertsAdmin.Domain.Enums;
+
+namespace AlertsAdmin.Domain.Models
+{
+    public class MessageType
+    {
+        public int Id { get; set; }
+        public string Template { get; set; }
+        public string Level { get; set; }
+
+        public AlertPriority Priority { get; set; }
+        public AlertNotification Notification { get; set; }
+
+        public AlertStatus DefaultStatus { get; set; }
+
+        public DateTime ExpiryTime { get; set; }
+        public int ExpiryCount { get; set; }
+    }
+}

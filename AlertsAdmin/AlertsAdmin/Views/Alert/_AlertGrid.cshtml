@@ -1,0 +1,68 @@
+﻿@model AlertViewModel
+<form asp-controller="Alert" asp-action="Search" method="get">
+    <p>
+        Message: <input type="text" asp-for="SearchString" />
+        <input type="submit" value="Search"/>
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().Template)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().Priority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().ExpiryTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().Acknowledged)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().AckCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Alerts.FirstOrDefault().AckTime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Alerts)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Template)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Priority)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpiryTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Acknowledged)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AckCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AckTime)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
