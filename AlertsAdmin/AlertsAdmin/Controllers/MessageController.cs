@@ -3,33 +3,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AlertsAdmin.Domain.Interfaces;
+using AlertsAdmin.Domain.Models;
 using AlertsAdmin.Models;
+using AlertsAdmin.Service.Search;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlertsAdmin.Controllers
 {
     public class MessageController : Controller
     {
-        private static IAlertRepository _alertRepo;
+        private readonly IAlertRepository _alertRepo;
+        private readonly IMessageSearch _messageSearch;
 
-        public MessageController(IAlertRepository alertRepository)
+        public MessageController(IAlertRepository alertRepository, IMessageSearch messageSearch)
         {
             _alertRepo = alertRepository;
+            _messageSearch = messageSearch;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var alerts = await _alertRepo.GetAllAlertsAsync();
+            var messages = await _alertRepo.GetAllAlertsAsync();
 
-            return View(new MessageViewModel { Messages = alerts});
+            return View(new MessageViewModel { Messages = messages });
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Search(string searchString)
+        [HttpPost]
+        public async Task<IActionResult> Search(MessageSearchOptions options)
         {
-            var alerts = await _alertRepo.FindAlertsByMessage(searchString);
-            return View("Index",new MessageViewModel { Messages = alerts });
+            var messages = await _messageSearch.Search(options);
+            return View("Index",new MessageViewModel { Messages = messages, options = options});
         }
 
     }

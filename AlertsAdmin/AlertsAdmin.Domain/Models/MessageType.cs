@@ -9,7 +9,7 @@ namespace AlertsAdmin.Domain.Models
     {
         public int Id { get; set; }
         public string Template { get; set; }
-        public string Level { get; set; }
+        public AlertLevel Level { get; set; }
 
         public AlertPriority Priority { get; set; }
         public AlertNotification Notification { get; set; }
