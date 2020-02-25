@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace AlertsAdmin.Models
 {
-    public class AlertViewModel
+    public class MessageViewModel
     {
-        public IEnumerable<MessageType> Alerts { get; set; }
-        public string SearchString { get; set; }
+        public IEnumerable<MessageType> Messages { get; set; }
     }
 }
