@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AlertsAdmin.Controllers
 {
-    public class AlertController : Controller
+    public class MessageController : Controller
     {
         private static IAlertRepository _alertRepo;
 
-        public AlertController(IAlertRepository alertRepository)
+        public MessageController(IAlertRepository alertRepository)
         {
             _alertRepo = alertRepository;
         }
@@ -22,14 +22,14 @@ namespace AlertsAdmin.Controllers
         {
             var alerts = await _alertRepo.GetAllAlertsAsync();
 
-            return View(new AlertViewModel { Alerts = alerts});
+            return View(new MessageViewModel { Messages = alerts});
         }
 
         [HttpGet]
         public async Task<IActionResult> Search(string searchString)
         {
             var alerts = await _alertRepo.FindAlertsByMessage(searchString);
-            return View("Index",new AlertViewModel { Alerts = alerts });
+            return View("Index",new MessageViewModel { Messages = alerts });
         }
 
     }
