@@ -5,26 +5,28 @@ using System.Threading.Tasks;
 using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Domain.Models;
 using AlertsAdmin.Models;
-using AlertsAdmin.Service.Search;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace AlertsAdmin.Controllers
 {
-    public class MessageController : Controller
+    public class MessagesController : Controller
     {
-        private readonly IAlertRepository _alertRepo;
+        private readonly IMessageRepository _messageRepo;
         private readonly IMessageSearch _messageSearch;
+        private readonly IServiceProvider _serviceProvider;
 
-        public MessageController(IAlertRepository alertRepository, IMessageSearch messageSearch)
+        public MessagesController(IMessageRepository messageRepo, IMessageSearch messageSearch, IServiceProvider serviceProvider)
         {
-            _alertRepo = alertRepository;
+            _messageRepo = messageRepo;
             _messageSearch = messageSearch;
+            _serviceProvider = serviceProvider;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var messages = await _alertRepo.GetAllAlertsAsync();
+            var messages = await _messageRepo.GetAllMessagesAsync();
 
             return View(new MessageViewModel { Messages = messages });
         }
@@ -36,5 +38,12 @@ namespace AlertsAdmin.Controllers
             return View("Index",new MessageViewModel { Messages = messages, options = options});
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var message = await _messageRepo.GetAlertByIdAsync(id);
+            var messageJSON = JsonConvert.SerializeObject(message);
+            return Json(messageJSON);
+        }
     }
 }

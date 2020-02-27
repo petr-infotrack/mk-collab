@@ -23,7 +23,13 @@
                 <td>@Html.DisplayFor(m => message.Priority)</td>
                 <td>@Html.DisplayFor(m => message.Notification)</td>
                 <td>@Html.DisplayFor(m => message.DefaultStatus)</td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", "Message", new { id=message.Id})*@
+                    <button id="editButton" data-id="@message.Id" class="editbtn btn btn-secondary btn-sm">Edit</button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+
+@{ await Html.RenderPartialAsync("_EditMessageModal.cshtml",Model.Message);}
