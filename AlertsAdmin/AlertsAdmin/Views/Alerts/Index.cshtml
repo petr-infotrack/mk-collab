@@ -1,0 +1,26 @@
+﻿@model IEnumerable<AlertsAdmin.Domain.Models.Alert>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Instances.First().MessageType.Template)</th>
+            <th>@Html.DisplayNameFor(model => model.Count)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+        </tr>
+    </thead>
+    @foreach (var alert in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(m => alert.Id)</td>
+            <td>@Html.DisplayFor(m => alert.Instances.First().MessageType.Template)</td>
+            <td>@Html.DisplayFor(m => alert.Count)</td>
+            <td>@Html.DisplayFor(m => alert.Status)</td>
+        </tr>
+    }
+</table>

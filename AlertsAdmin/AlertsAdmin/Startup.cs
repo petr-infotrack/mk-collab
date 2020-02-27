@@ -27,8 +27,11 @@ namespace AlertsAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IAlertRepository, MessageRepository>();
+            services.AddTransient<IAlertInstanceRepository, AlertInstanceRepository>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
+            services.AddTransient<IAlertRepository, AlertRepository>();
             services.AddTransient<IMessageSearch, MessageSearch>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

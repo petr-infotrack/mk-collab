@@ -9,6 +9,7 @@ namespace AlertsAdmin.Models
     public class MessageViewModel
     {
         public IEnumerable<MessageType> Messages { get; set; }
+        public MessageType Message { get; set; }
         public MessageSearchOptions options { get; set; }
     }
 }

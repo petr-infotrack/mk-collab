@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\ModalScript.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="bootstrap-select" Version="1.13.12" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="4.0.20710" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
