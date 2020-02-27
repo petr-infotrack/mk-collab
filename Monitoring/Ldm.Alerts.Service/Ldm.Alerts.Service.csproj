@@ -129,7 +129,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ldm.Charting.Data\Ldm.Charting.Data.csproj">
+    <ProjectReference Include="..\..\Ldm.Charting\Ldm.Charting.Data\Ldm.Charting.Data.csproj">
       <Project>{05e905e9-7f32-43ed-b912-32106807c6fd}</Project>
       <Name>Ldm.Charting.Data</Name>
     </ProjectReference>
