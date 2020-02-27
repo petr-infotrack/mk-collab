@@ -11,8 +11,8 @@ namespace AlertsAdmin.Service.Search
 {
     public class MessageSearch : IMessageSearch
     {
-        private static IAlertRepository _messageRepo;
-        public MessageSearch(IAlertRepository messageRepo)
+        private static IMessageRepository _messageRepo;
+        public MessageSearch(IMessageRepository messageRepo)
         {
             _messageRepo = messageRepo;
         }
@@ -46,7 +46,7 @@ namespace AlertsAdmin.Service.Search
 
         public async Task<IEnumerable<MessageType>> Search(MessageSearchOptions options)
         {
-            var messages = await _messageRepo.GetAllAlertsAsync();
+            var messages = await _messageRepo.GetAllMessagesAsync();
             return await Search(options, messages);
         }
 

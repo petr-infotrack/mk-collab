@@ -6,8 +6,8 @@ using AlertsAdmin.Domain.Models;
 
 namespace AlertsAdmin.Domain.Interfaces
 {
-    public interface IAlertRepository
+    public interface IAlertInstanceRepository
     {
-        Task<IEnumerable<Alert>> GetAllAlertsAsync();
+        Task<IEnumerable<AlertInstance>> GetAllAlertInstancesAsync();
     }
 }

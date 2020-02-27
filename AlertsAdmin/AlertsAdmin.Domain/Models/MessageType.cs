@@ -16,7 +16,7 @@ namespace AlertsAdmin.Domain.Models
 
         public AlertStatus DefaultStatus { get; set; }
 
-        public DateTime ExpiryTime { get; set; }
+        public TimeSpan ExpiryTime { get; set; }
         public int ExpiryCount { get; set; }
     }
 }

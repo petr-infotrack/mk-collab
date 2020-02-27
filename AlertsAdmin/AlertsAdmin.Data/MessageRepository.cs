@@ -9,9 +9,13 @@ using AlertsAdmin.Domain.Enums;
 
 namespace AlertsAdmin.Data
 {
-    public class MessageRepository : IAlertRepository
+    public class MessageRepository : IMessageRepository
     {
-        private static IEnumerable<MessageType> _alets = new List<MessageType>
+<<<<<<< HEAD
+        private static IEnumerable<MessageType> _messages = new List<MessageType>
+=======
+        private static IEnumerable<MessageType> _alerts = new List<MessageType>
+>>>>>>> AlertsAdmin
         {
             new MessageType{Id=1,Template= "THIS IS ALERT 1", Level= AlertLevel.Information },
             new MessageType{Id=2,Template= "THIS IS ALERT 2", Level= AlertLevel.Error},
@@ -21,27 +25,31 @@ namespace AlertsAdmin.Data
             new MessageType{Id=6,Template= "THIS IS ALERT 6", Level= AlertLevel.Information},
         };
 
-        public async Task<IEnumerable<MessageType>> GetAllAlertsAsync()
+        public async Task<IEnumerable<MessageType>> GetAllMessagesAsync()
         {
-            return await GetAlertsAsync(x => true);
+            return await GetMessagesAsync();
         }
 
         public async Task<MessageType> GetAlertByIdAsync(int id)
         {
-            var alert = await GetAlertsAsync(x => x.Id == id);
-            return alert.Single();
+            var messages = await GetMessagesAsync(x => x.Id == id);
+            return messages.Single();
         }
 
-        public async Task<IEnumerable<MessageType>> FindAlertsByMessage(string message)
+        public async Task<IEnumerable<MessageType>> FindMessagesByMessage(string message)
         {
-            var alerts = await GetAlertsAsync(x => x.Template.ToUpper().Contains(message.ToUpper()));
-            return alerts;
+            var messages = await GetMessagesAsync(x => x.Template.ToUpper().Contains(message.ToUpper()));
+            return messages;
         }
 
-        public async Task<IEnumerable<MessageType>> GetAlertsAsync(Func<MessageType, bool> predicate = null)
+        public async Task<IEnumerable<MessageType>> GetMessagesAsync(Func<MessageType, bool> predicate = null)
         {
             return await Task.Run(() =>
-                _alets.Where(predicate ?? (s => true)).ToList()
+<<<<<<< HEAD
+                _messages.Where(predicate ?? (m => true))
+=======
+                _alerts.Where(predicate ?? (s => true)).ToList()
+>>>>>>> AlertsAdmin
             );
         }
     }
