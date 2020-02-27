@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertsAdmin", "AlertsAdmin\AlertsAdmin.csproj", "{CBF6FC32-05FC-4550-B590-02213D71D647}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin", "AlertsAdmin\AlertsAdmin.csproj", "{CBF6FC32-05FC-4550-B590-02213D71D647}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertsAdmin.Domain", "AlertsAdmin.Domain\AlertsAdmin.Domain.csproj", "{61223188-26A4-4742-B7F7-056252B91AB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.Domain", "AlertsAdmin.Domain\AlertsAdmin.Domain.csproj", "{61223188-26A4-4742-B7F7-056252B91AB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertsAdmin.Service", "AlertsAdmin.Service\AlertsAdmin.Service.csproj", "{DCA1A2DA-C0CF-4A74-ABC4-BA277711D357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.Service", "AlertsAdmin.Service\AlertsAdmin.Service.csproj", "{DCA1A2DA-C0CF-4A74-ABC4-BA277711D357}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlertsAdmin.Data", "AlertsAdmin.Data\AlertsAdmin.Data.csproj", "{328E9083-4F75-4876-B35D-3BCE5052601F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.Data", "AlertsAdmin.Data\AlertsAdmin.Data.csproj", "{328E9083-4F75-4876-B35D-3BCE5052601F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Presentation", "1. Presentation", "{BD76BCDD-BD3A-45E8-8C7E-300B25A9C517}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Service", "3. Service", "{8AACFC81-F827-4536-8B65-87F4B26D9313}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Data", "4. Data", "{7FA87C74-C963-4A34-BAA1-EA0E131992AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Monitor", "5. Monitor", "{3B3CDEDA-1B4A-4695-B87E-23BB5AB04CEC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6. Charting", "6. Charting", "{D780119C-E9E6-4F6C-A8B7-B1E8D626AACD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

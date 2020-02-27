@@ -13,10 +13,19 @@ namespace AlertsAdmin.Data
         private IEnumerable<Alert> _alerts;
         private readonly IAlertInstanceRepository _alertInstanceRepository;
 
+
+        private readonly AlertMonitoringContext _db;
+
         public AlertRepository(IAlertInstanceRepository alertInstanceRepository)
         {
             _alertInstanceRepository = alertInstanceRepository;
+
+#if !SIMULATION
+            //TODO -- once structures completed, it'll be replaced with injection
+            _db = new AlertMonitoringContext();
+#else
             GenerateAlerts().Wait();
+#endif
         }
 
         public async Task<IEnumerable<Alert>> GetAllAlertsAsync()
@@ -26,10 +35,16 @@ namespace AlertsAdmin.Data
 
         public async Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert,bool> predicate = null)
         {
+#if !SIMULATION
+            //TODO -- once structures completed, it'll be replaced with injection
+            return await Task.FromResult(_db.Alerts.Where(predicate ?? (a => true)));
+#else
             return await Task.Run(() =>
             {
                 return _alerts.Where(predicate ?? (a => true));
             });
+#endif
+
         }
 
         private async Task GenerateAlerts()

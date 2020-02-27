@@ -11,7 +11,17 @@ namespace AlertsAdmin.Data
 {
     public class MessageRepository : IMessageRepository
     {
-        private static IEnumerable<MessageType> _messages = new List<MessageType>
+        private static IEnumerable<MessageType> _messages;
+        
+        private readonly AlertMonitoringContext _db;
+
+        public MessageRepository()
+        {
+#if !SIMULATION
+            //TODO -- once structures completed, it'll be replaced with injection
+            _db = new AlertMonitoringContext();
+#else
+        _messages = new List<MessageType>
         {
             new MessageType{Id=1,Template= "THIS IS ALERT 1", Level= AlertLevel.Information },
             new MessageType{Id=2,Template= "THIS IS ALERT 2", Level= AlertLevel.Error},
@@ -20,6 +30,11 @@ namespace AlertsAdmin.Data
             new MessageType{Id=5,Template= "GOT A TEST?", Level= AlertLevel.Warning},
             new MessageType{Id=6,Template= "THIS IS ALERT 6", Level= AlertLevel.Information},
         };
+#endif
+        }
+
+
+
 
         public async Task<IEnumerable<MessageType>> GetAllMessagesAsync()
         {
@@ -40,10 +55,15 @@ namespace AlertsAdmin.Data
 
         public async Task<IEnumerable<MessageType>> GetMessagesAsync(Func<MessageType, bool> predicate = null)
         {
+
+#if !SIMULATION
+            //TODO -- once structures completed, it'll be replaced with injection
+            return await Task.FromResult(_db.MessageTypes.Where(predicate ?? (a => true)));
+#else
             return await Task.Run(() =>
                 _messages.Where(predicate ?? (m => true))
-
             );
+#endif
         }
     }
 }
