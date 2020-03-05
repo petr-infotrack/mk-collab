@@ -10,7 +10,8 @@ namespace AlertsAdmin.Domain.Interfaces
     {
         Task<IEnumerable<MessageType>> GetAllMessagesAsync();
         Task<IEnumerable<MessageType>> GetMessagesAsync(Func<MessageType, bool> predicate);
-        Task<MessageType> GetAlertByIdAsync(int id);
+        Task<MessageType> GetMessageByIdAsync(int id);
         Task<IEnumerable<MessageType>> FindMessagesByMessage(string message);
+        Task UpdateMessageAsync(MessageType message);
     }
 }

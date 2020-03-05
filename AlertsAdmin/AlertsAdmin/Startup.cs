@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Data;
 using AlertsAdmin.Service.Search;
+using EFCore.DbContextFactory.Extensions;
 
 namespace AlertsAdmin
 {
@@ -31,6 +33,8 @@ namespace AlertsAdmin
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<IAlertRepository, AlertRepository>();
             services.AddTransient<IMessageSearch, MessageSearch>();
+            services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
+                            .UseSqlServer(Configuration.GetConnectionString("AlertMonitoring")));
 
         }
 

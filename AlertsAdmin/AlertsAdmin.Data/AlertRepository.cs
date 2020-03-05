@@ -10,22 +10,16 @@ namespace AlertsAdmin.Data
 {
     public class AlertRepository : IAlertRepository
     {
-        private IEnumerable<Alert> _alerts;
         private readonly IAlertInstanceRepository _alertInstanceRepository;
 
 
-        private readonly AlertMonitoringContext _db;
+        private AlertMonitoringContext _db => _factory.Invoke();
+        private readonly Func<AlertMonitoringContext> _factory;
 
-        public AlertRepository(IAlertInstanceRepository alertInstanceRepository)
+        public AlertRepository(IAlertInstanceRepository alertInstanceRepository, Func<AlertMonitoringContext> factory)
         {
             _alertInstanceRepository = alertInstanceRepository;
-
-#if !SIMULATION
-            //TODO -- once structures completed, it'll be replaced with injection
-            _db = new AlertMonitoringContext();
-#else
-            GenerateAlerts().Wait();
-#endif
+            _factory = factory;
         }
 
         public async Task<IEnumerable<Alert>> GetAllAlertsAsync()
@@ -33,44 +27,47 @@ namespace AlertsAdmin.Data
             return await GetAlertsAsync();
         }
 
-        public async Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert,bool> predicate = null)
+        public async Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert, bool> predicate = null)
         {
-#if !SIMULATION
-            //TODO -- once structures completed, it'll be replaced with injection
-            return await Task.FromResult(_db.Alerts.Where(predicate ?? (a => true)));
-#else
-            return await Task.Run(() =>
+            using (var context = _db)
             {
-                return _alerts.Where(predicate ?? (a => true));
-            });
-#endif
-
+                return (await Task.FromResult(context.Alerts.Where(predicate ?? (a => true)))).ToList();
+            }
         }
 
-        private async Task GenerateAlerts()
+        private async Task<IEnumerable<Alert>> GroupAlertInstancesAsync()
         {
-            var alerts = new List<Alert>();
-            var instances = (await _alertInstanceRepository.GetAllAlertInstancesAsync()).ToList();
-            var grouped = instances
-                            .GroupBy(i => i.MessageType, i =>
-                            {
-                                i.MessageType = i.MessageType;
-                                return i;
-                            });
-            int i = 1;
-            foreach(var instanceType in grouped)
-            {
-                alerts.Add(
-                        new Alert()
-                        {
-                            Id = i,
-                            Instances = instanceType.AsEnumerable()
-                        }
-                    );
-                i++;
-            }
+            var instances = await _alertInstanceRepository.GetAllAlertInstancesAsync();
+            return await GroupAlertInstancesAsync(instances);
+        }
 
-            _alerts = alerts;
+        private async Task<IEnumerable<Alert>> GroupAlertInstancesAsync(IEnumerable<AlertInstance> alertInstances)
+        {
+            return await Task.Run(() =>
+            {
+                var alerts = new List<Alert>();
+                var grouped = alertInstances
+                                .GroupBy(i => i.MessageType, i =>
+                                {
+                                    i.MessageType = i.MessageType;
+                                    return i;
+                                });
+
+                int i = 1;
+                foreach (var instanceType in grouped)
+                {
+                    alerts.Add(
+                            new Alert()
+                            {
+                                Id = i,
+                                Instances = instanceType.AsEnumerable()
+                            }
+                        );
+                    i++;
+                }
+
+                return alerts;
+            });
         }
     }
 }

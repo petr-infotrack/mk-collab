@@ -11,40 +11,28 @@ namespace AlertsAdmin.Data
 {
     public class MessageRepository : IMessageRepository
     {
-        private static IEnumerable<MessageType> _messages;
-        
-        private readonly AlertMonitoringContext _db;
+        private readonly Func<AlertMonitoringContext> _factory;
+        private AlertMonitoringContext _db => _factory.Invoke();
 
-        public MessageRepository()
+
+        public MessageRepository(Func<AlertMonitoringContext> factory)
         {
-#if !SIMULATION
-            //TODO -- once structures completed, it'll be replaced with injection
-            _db = new AlertMonitoringContext();
-#else
-        _messages = new List<MessageType>
-        {
-            new MessageType{Id=1,Template= "THIS IS ALERT 1", Level= AlertLevel.Information },
-            new MessageType{Id=2,Template= "THIS IS ALERT 2", Level= AlertLevel.Error},
-            new MessageType{Id=3,Template= "GOTCHA", Level= AlertLevel.Error},
-            new MessageType{Id=4,Template= "THIS IS ALERT 4", Level= AlertLevel.Information},
-            new MessageType{Id=5,Template= "GOT A TEST?", Level= AlertLevel.Warning},
-            new MessageType{Id=6,Template= "THIS IS ALERT 6", Level= AlertLevel.Information},
-        };
-#endif
+            _factory = factory;
         }
-
-
-
 
         public async Task<IEnumerable<MessageType>> GetAllMessagesAsync()
         {
             return await GetMessagesAsync();
         }
 
-        public async Task<MessageType> GetAlertByIdAsync(int id)
+        public async Task<MessageType> GetMessageByIdAsync(int id)
         {
             var messages = await GetMessagesAsync(x => x.Id == id);
-            return messages.Single();
+            if(messages.Count() > 1)
+                throw new ArgumentOutOfRangeException($"Multiple messages returned for id: {id}");
+            if (messages.Count() == 1)
+                return messages.Single();
+            return null;
         }
 
         public async Task<IEnumerable<MessageType>> FindMessagesByMessage(string message)
@@ -55,15 +43,19 @@ namespace AlertsAdmin.Data
 
         public async Task<IEnumerable<MessageType>> GetMessagesAsync(Func<MessageType, bool> predicate = null)
         {
+            using(var context = _db)
+            {
+                return (await Task.FromResult(context.MessageTypes.Where(predicate ?? (a => true)))).ToList();
+            }
+        }
 
-#if !SIMULATION
-            //TODO -- once structures completed, it'll be replaced with injection
-            return await Task.FromResult(_db.MessageTypes.Where(predicate ?? (a => true)));
-#else
-            return await Task.Run(() =>
-                _messages.Where(predicate ?? (m => true))
-            );
-#endif
+        public async Task UpdateMessageAsync(MessageType message)
+        {
+            using(var context = _db)
+            {
+                context.Update(message);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

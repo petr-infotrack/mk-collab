@@ -14,13 +14,11 @@ namespace AlertsAdmin.Controllers
     {
         private readonly IMessageRepository _messageRepo;
         private readonly IMessageSearch _messageSearch;
-        private readonly IServiceProvider _serviceProvider;
 
-        public MessagesController(IMessageRepository messageRepo, IMessageSearch messageSearch, IServiceProvider serviceProvider)
+        public MessagesController(IMessageRepository messageRepo, IMessageSearch messageSearch)
         {
             _messageRepo = messageRepo;
             _messageSearch = messageSearch;
-            _serviceProvider = serviceProvider;
         }
 
         [HttpGet]
@@ -39,11 +37,20 @@ namespace AlertsAdmin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            var message = await _messageRepo.GetAlertByIdAsync(id);
+            var message = await _messageRepo.GetMessageByIdAsync(Id);
+            if (message == null)
+                return NotFound();
             var messageJSON = JsonConvert.SerializeObject(message);
             return Json(messageJSON);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(MessageType message)
+        {
+            await _messageRepo.UpdateMessageAsync(message);
+            return Redirect("Index");
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿@model AlertsAdmin.Models.MessageViewModel
 
-@{await Html.RenderPartialAsync("_MessageSearch.cshtml", Model.options);}
 
 <table class="table">
     <thead>
@@ -32,4 +31,3 @@
     </tbody>
 </table>
 
-@{ await Html.RenderPartialAsync("_EditMessageModal.cshtml",Model.Message);}

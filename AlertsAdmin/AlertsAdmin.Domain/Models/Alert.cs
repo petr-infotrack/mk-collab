@@ -18,5 +18,6 @@ namespace AlertsAdmin.Domain.Models
         public int Count => Instances.Count();
         public AlertInstance FirstInstance => Instances.FirstOrDefault();
         public DateTime FirstTimestamp => Instances.FirstOrDefault().Timestamp;
+        public AlertPriority MyProperty => Instances.FirstOrDefault().MessageType.Priority;
     }
 }

@@ -20,7 +20,7 @@ namespace AlertsAdmin.Controllers
 
         public IActionResult Index()
         {
-            return Redirect("Alerts");
+            return Redirect("Messages");
         }
 
         public IActionResult Privacy()

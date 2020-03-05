@@ -1,12 +1,14 @@
 ﻿@model MessageViewModel
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Messages";
 }
 
-<h1>Index</h1>
+<h1>Messages</h1>
 
+@{await Html.RenderPartialAsync("_MessageSearch.cshtml", Model.options);}
 @{await Html.RenderPartialAsync("_MessageGrid.cshtml", Model);}
+@{await Html.RenderPartialAsync("_EditMessageModal.cshtml", Model.Message);}
 
 
 @section Scripts{
