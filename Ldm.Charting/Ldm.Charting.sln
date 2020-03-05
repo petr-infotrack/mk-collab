@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ldm.Charting.Web", "Ldm.Charting.Web\Ldm.Charting.Web.csproj", "{BC50CD6E-D5B6-4813-9448-AFC996E97DF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ldm.Charting.Web.Tests", "Ldm.Charting.Web.Tests\Ldm.Charting.Web.Tests.csproj", "{5F9E8C3E-21DD-4DC3-8729-B173E663DAF8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ldm.Charting.Data", "Ldm.Charting.Data\Ldm.Charting.Data.csproj", "{05E905E9-7F32-43ED-B912-32106807C6FD}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://syd-schbuild-01:8080/tfs/ldmrepository
+		SccProjectUniqueName0 = Ldm.Charting.Data\\Ldm.Charting.Data.csproj
+		SccProjectName0 = Ldm.Charting.Data
+		SccLocalPath0 = Ldm.Charting.Data
+		SccProjectUniqueName1 = Ldm.Charting.Web.Tests\\Ldm.Charting.Web.Tests.csproj
+		SccProjectName1 = Ldm.Charting.Web.Tests
+		SccLocalPath1 = Ldm.Charting.Web.Tests
+		SccProjectUniqueName2 = Ldm.Charting.Web\\Ldm.Charting.Web.csproj
+		SccProjectName2 = Ldm.Charting.Web
+		SccLocalPath2 = Ldm.Charting.Web
+		SccLocalPath3 = .
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC50CD6E-D5B6-4813-9448-AFC996E97DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC50CD6E-D5B6-4813-9448-AFC996E97DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC50CD6E-D5B6-4813-9448-AFC996E97DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC50CD6E-D5B6-4813-9448-AFC996E97DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9E8C3E-21DD-4DC3-8729-B173E663DAF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9E8C3E-21DD-4DC3-8729-B173E663DAF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9E8C3E-21DD-4DC3-8729-B173E663DAF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9E8C3E-21DD-4DC3-8729-B173E663DAF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05E905E9-7F32-43ED-B912-32106807C6FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05E905E9-7F32-43ED-B912-32106807C6FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05E905E9-7F32-43ED-B912-32106807C6FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05E905E9-7F32-43ED-B912-32106807C6FD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

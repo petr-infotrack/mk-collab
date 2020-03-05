@@ -1,0 +1,80 @@
+﻿html,
+body
+{
+    background-color: black;
+    color: white;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+.title
+{
+    font-family: 'Segoe UI';
+    font-size: 2em;
+    text-align: center;
+}
+
+#chart1content
+{
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    float: left;
+}
+
+#chart2content
+{
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    float: right;
+}
+
+
+.emc2-alert-box
+{
+    width: 500px;
+    min-height: 80px;
+    margin-bottom: 10px;
+     margin-right: 50px;
+}
+
+.outline
+{
+    /*outline: 2px solid white;*/
+    overflow: hidden;
+    overflow-y: hidden;
+}
+
+#left
+{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    right: 50%;
+    bottom: 0%;
+}
+
+#right
+{
+    position: absolute;
+    top: 0%;
+    left: 50%;
+    right: 0%;
+    bottom: 0%;
+}
+#rightinner
+{
+    width:98%;
+}
+iframe 
+{
+    border:0px;
+}
+.iframeContainer {
+padding:20px;
+padding-top:27px;
+}
