@@ -13,11 +13,12 @@ namespace AlertsAdmin.Domain.Models
         public IEnumerable<AlertInstance> Instances { get; set; }
         public AlertStatus Status { get; set; }
         public string StatusMessage { get; set; }
+        public DateTime TimeStamp { get; set; }
 
 
         public int Count => Instances.Count();
         public AlertInstance FirstInstance => Instances.FirstOrDefault();
         public DateTime FirstTimestamp => Instances.FirstOrDefault().Timestamp;
-        public AlertPriority MyProperty => Instances.FirstOrDefault().MessageType.Priority;
+        public AlertPriority AlertPriority => Instances.FirstOrDefault().MessageType.Priority;
     }
 }
