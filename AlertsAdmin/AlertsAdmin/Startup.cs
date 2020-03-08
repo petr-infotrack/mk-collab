@@ -10,7 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using AlertsAdmin.Domain.Interfaces;
-using AlertsAdmin.Data;
+using AlertsAdmin.Data.Contexts;
+using AlertsAdmin.Data.Repositories;
 using AlertsAdmin.Service.Search;
 using EFCore.DbContextFactory.Extensions;
 
@@ -33,8 +34,11 @@ namespace AlertsAdmin
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<IAlertRepository, AlertRepository>();
             services.AddTransient<IMessageSearch, MessageSearch>();
+            services.AddTransient<IQueueRepository, QueueRepository>();
             services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
                             .UseSqlServer(Configuration.GetConnectionString("AlertMonitoring")));
+            services.AddDbContextFactory<LdmCoreContext>(builder => builder
+                            .UseSqlServer(Configuration.GetConnectionString("LdmCore")));
 
         }
 

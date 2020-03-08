@@ -6,8 +6,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Domain.Enums;
+using AlertsAdmin.Data.Contexts;
 
-namespace AlertsAdmin.Data
+namespace AlertsAdmin.Data.Repositories
 {
     public class MessageRepository : IMessageRepository
     {
@@ -35,7 +36,7 @@ namespace AlertsAdmin.Data
             return null;
         }
 
-        public async Task<IEnumerable<MessageType>> FindMessagesByMessage(string message)
+        public async Task<IEnumerable<MessageType>> FindMessagesByMessageAsync(string message)
         {
             var messages = await GetMessagesAsync(x => x.Template.ToUpper().Contains(message.ToUpper()));
             return messages;

@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\js\ModalScript.js" />
+    <None Include="wwwroot\js\MessageModalScript.js" />
   </ItemGroup>
 
   <ItemGroup>

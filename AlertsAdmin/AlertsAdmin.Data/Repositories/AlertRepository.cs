@@ -5,8 +5,9 @@ using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Domain.Models;
 using System.Threading.Tasks;
 using System.Linq;
+using AlertsAdmin.Data.Contexts;
 
-namespace AlertsAdmin.Data
+namespace AlertsAdmin.Data.Repositories
 {
     public class AlertRepository : IAlertRepository
     {

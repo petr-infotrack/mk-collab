@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 
-namespace AlertsAdmin.Data
+namespace AlertsAdmin.Data.Contexts
 {
     public class AlertMonitoringContext : DbContext
     {

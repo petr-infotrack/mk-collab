@@ -1,14 +1,4 @@
-﻿
-function ajax_get_promise(target) {
-    return new window.Promise((resolve, reject) => {
-        $.get({ url: target})
-            .done((response) => {
-                resolve(response);
-            })
-            .fail((jqXhr, textStatus, errorThrown) => reject(errorThrown));
-    });
-}
-$(function () {
+﻿$(function () {
     var detailUrl = '/Messages/Edit';
     $('.editbtn').on('click', function (e) {
         e.preventDefault();

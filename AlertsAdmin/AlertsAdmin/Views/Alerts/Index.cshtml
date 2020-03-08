@@ -3,24 +3,44 @@
     ViewData["Title"] = "Alerts";
 }
 
-<h1>Alerts</h1>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h2>Chart:</h2>
+            </div>
+            <div class="row">
+                <div class="ct-chart ct-perfect-fourth"></div>
+            </div>
+        </div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>@Html.DisplayNameFor(model => model.Id)</th>
-            <th>@Html.DisplayNameFor(model => model.Instances.First().MessageType.Template)</th>
-            <th>@Html.DisplayNameFor(model => model.Count)</th>
-            <th>@Html.DisplayNameFor(model => model.Status)</th>
-        </tr>
-    </thead>
-    @foreach (var alert in Model)
-    {
-        <tr>
-            <td>@Html.DisplayFor(m => alert.Id)</td>
-            <td>@Html.DisplayFor(m => alert.Instances.First().MessageType.Template)</td>
-            <td>@Html.DisplayFor(m => alert.Count)</td>
-            <td>@Html.DisplayFor(m => alert.Status)</td>
-        </tr>
-    }
-</table>
+        <div class="col">
+            <h2>Alerts:</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.Id)</th>
+                        <th>@Html.DisplayNameFor(model => model.Instances.First().MessageType.Template)</th>
+                        <th>@Html.DisplayNameFor(model => model.Count)</th>
+                        <th>@Html.DisplayNameFor(model => model.Status)</th>
+                    </tr>
+                </thead>
+                @foreach (var alert in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(m => alert.Id)</td>
+                        <td>@Html.DisplayFor(m => alert.Instances.First().MessageType.Template)</td>
+                        <td>@Html.DisplayFor(m => alert.Count)</td>
+                        <td>@Html.DisplayFor(m => alert.Status)</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="~/js/Queue.js"></script>
+}
