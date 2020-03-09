@@ -30,7 +30,6 @@ namespace AlertsAdmin
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IAlertInstanceRepository, AlertInstanceRepository>();
             services.AddTransient<IMessageRepository, MessageRepository>();
             services.AddTransient<IAlertRepository, AlertRepository>();
             services.AddTransient<IMessageSearch, MessageSearch>();

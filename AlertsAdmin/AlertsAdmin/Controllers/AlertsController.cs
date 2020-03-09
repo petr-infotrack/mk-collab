@@ -19,7 +19,7 @@ namespace AlertsAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var alerts = await _alertsRepo.GetAllAlertsAsync();
+            var alerts = await _alertsRepo.GetActiveAlertsAsync();
             return View(alerts);
         }
     }

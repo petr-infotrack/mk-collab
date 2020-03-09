@@ -1,16 +1,19 @@
-﻿$(function () {
+﻿const maxScreens = 2
+$(function () {
     var chartistBarOptions = {
         seriesBarDistance: 10,
         reverseData: true,
         horizontalBars: true,
         axisY: {
             offset: 70
+        },
+        axisX: {
+            onlyInteger: true
         }
     }
     new Chartist.Bar('#queueChart', {}, chartistBarOptions)
-    new Chartist.Bar('#pencilChart', {}, chartistBarOptions)
 
-    UpdateCharts();
+    UpdateChart(1);
     PollForData();
 })
 
@@ -32,19 +35,28 @@ function ParseChartData(data){
     return chartData
 }
 
-function UpdateCharts() {
-    ajax_get_promise('/Data/Queues').then((response) => {
+function UpdateChart(state) {
+    let route
+    switch (state) {
+        case 1:
+            route = '/Data/Queues';
+            break;
+        case 2:
+            route = '/Data/PencilQueues';
+            break;
+        default:
+            route = '/Data/Queues';
+            break;
+    }
+
+    ajax_get_promise(route).then((response) => {
         var chartData = ParseChartData(response)
         document.getElementById('queueChart').__chartist__.update(chartData);
-    })
-
-    ajax_get_promise('/Data/PencilQueues').then((response) => {
-        var chartData = ParseChartData(response)
-        document.getElementById('pencilChart').__chartist__.update(chartData);
     })
 }
 
 function PollForData() {
+    let state = 2
     let cancelCallback = () => { };
 
     var sleep = (period) => {
@@ -81,8 +93,11 @@ function PollForData() {
             }
         })
 
-        UpdateCharts();
+        UpdateChart(state);
 
+        state++;
+        if (state > maxScreens)
+            state = 1;
     })
 
     poll(() => new Promise((resolve) => {

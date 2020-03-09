@@ -9,5 +9,7 @@ namespace AlertsAdmin.Domain.Interfaces
     public interface IAlertRepository
     {
         Task<IEnumerable<Alert>> GetAllAlertsAsync();
+        Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert, bool> predicate);
+        Task<IEnumerable<Alert>> GetActiveAlertsAsync();
     }
 }

@@ -17,5 +17,7 @@ namespace AlertsAdmin.Domain.Models
 
         public TimeSpan ExpiryTime { get; set; }
         public int ExpiryCount { get; set; }
+
+        public IEnumerable<AlertInstance> Instances { get; set; }
     }
 }

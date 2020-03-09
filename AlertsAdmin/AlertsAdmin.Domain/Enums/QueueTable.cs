@@ -13,6 +13,7 @@ namespace AlertsAdmin.Domain.Enums
         [QueueName("Order Updates")]
         [Query(@"SELECT COUNT(*) FROM LdmCore.dbo.OrderUpdates WITH (NOLOCK) WHERE Identifier NOT LIKE '%WcfReceiver_OfficeExpressIntegrationService%'")]
         OrderUpdates,
+        [QueueName("OfficeExpress Order Updates")]
         [Query(@"SELECT COUNT(*) FROM LdmCore.dbo.OrderUpdates WITH (NOLOCK) WHERE Identifier LIKE '%WcfReceiver_OfficeExpressIntegrationService%'")]
         OfficeExpressOrderUpdates,
         [QueueName("Order Execution Tasks")]

@@ -13,7 +13,20 @@ namespace AlertsAdmin.Data.Contexts
         public AlertMonitoringContext() { }
         public AlertMonitoringContext(DbContextOptions options)
             : base(options) { }
-        
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<AlertInstance>()
+                .HasOne(ai => ai.Alert)
+                .WithMany(a => a.Instances)
+                .HasForeignKey(ai => ai.AlertId);
+
+            modelBuilder.Entity<AlertInstance>()
+                .HasOne(ai => ai.MessageType)
+                .WithMany(m => m.Instances)
+                .HasForeignKey(ai => ai.MessageTypeId);
+        }
+
         public DbSet<AlertInstance> AlertInstances { get; set; }
 
         public DbSet<Alert> Alerts { get; set; }

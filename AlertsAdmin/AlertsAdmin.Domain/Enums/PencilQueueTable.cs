@@ -7,7 +7,7 @@ namespace AlertsAdmin.Domain.Enums
     [QueueTable]
     public enum PencilQueueTable
     {
-        [QueueName("Pencil OrderToDispatch")]
+        [QueueName("Pencil Order To Dispatch")]
         [Query("SELECT COUNT(*) FROM PENCIL.dbo.RunQueueOrderToDispatch WITH (NOLOCK) WHERE RequiresAttention = 0")]
         PencilOrderToDispatch,
         [QueueName("Pencil Forms Building")]
