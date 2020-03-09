@@ -1,37 +1,48 @@
-﻿let chartistBarOptions = {
-    seriesBarDistance: 10,
-    reverseData: true,
-    horizontalBars: true,
-    axisY: {
-        offset: 70
-    }
-}
-
-function UpdateChart() {
-    return ajax_get_promise('/Data/Queues').then((response) => {
-        data = JSON.parse(response);
-        var labels = []
-        var series = []
-
-        data.forEach((item) => {
-            labels.push(item.Key)
-            series.push(item.Value)
-        })
-
-        var chartData = {
-            labels: labels
-            , series: series
+﻿$(function () {
+    var chartistBarOptions = {
+        seriesBarDistance: 10,
+        reverseData: true,
+        horizontalBars: true,
+        axisY: {
+            offset: 70
         }
-        
-        new Chartist.Bar('.ct-chart', chartData, chartistBarOptions)
-    })
-}
+    }
+    new Chartist.Bar('#queueChart', {}, chartistBarOptions)
+    new Chartist.Bar('#pencilChart', {}, chartistBarOptions)
 
-
-$(function () {
-    UpdateChart();
+    UpdateCharts();
     PollForData();
 })
+
+function ParseChartData(data){
+    data = JSON.parse(data);
+    var labels = []
+    var series = []
+
+    data.forEach((item) => {
+        labels.push(item.Key)
+        series.push(item.Value)
+    })
+
+    var chartData = {
+        labels: labels
+        , series: [series]
+    }
+
+    return chartData
+}
+
+function UpdateCharts() {
+    ajax_get_promise('/Data/Queues').then((response) => {
+        var chartData = ParseChartData(response)
+        document.getElementById('queueChart').__chartist__.update(chartData);
+    })
+
+    ajax_get_promise('/Data/PencilQueues').then((response) => {
+        var chartData = ParseChartData(response)
+        document.getElementById('pencilChart').__chartist__.update(chartData);
+    })
+}
 
 function PollForData() {
     let cancelCallback = () => { };
@@ -70,12 +81,11 @@ function PollForData() {
             }
         })
 
-        UpdateChart();
+        UpdateCharts();
 
     })
 
-
     poll(() => new Promise((resolve) => {
         resolve(); //you need resolve to jump into .then()
-    }), 3000, 10000);
+    }), 10000, 10000);
 }

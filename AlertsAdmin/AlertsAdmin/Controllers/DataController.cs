@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using AlertsAdmin.Domain.Enums;
 
 namespace AlertsAdmin.Controllers
 {
@@ -19,7 +20,15 @@ namespace AlertsAdmin.Controllers
         [HttpGet]
         public async Task<IActionResult> Queues()
         {
-            var data = await _queueRepository.GetQueueData();
+            var data = await _queueRepository.GetQueueDataAsync<LdmQueueTable>();
+            var jsonData = JsonConvert.SerializeObject(data);
+            return Json(jsonData);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PencilQueues()
+        {
+            var data = await _queueRepository.GetQueueDataAsync<PencilQueueTable>();
             var jsonData = JsonConvert.SerializeObject(data);
             return Json(jsonData);
         }

@@ -1,79 +1,83 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using AlertsAdmin.Domain.Interfaces;
-using AlertsAdmin.Data.Contexts;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
-using AlertsAdmin.Domain.Enums;
 using AlertsAdmin.Domain.Extensions;
+using Dapper;
+using System.Data;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+using AlertsAdmin.Domain.Attributes;
 
 namespace AlertsAdmin.Data.Repositories
 {
     public class QueueRepository : IQueueRepository
     {
-        private readonly Func<LdmCoreContext> _factory;
-        private LdmCoreContext _db => _factory.Invoke();
+        private readonly IDbConnection _db;
 
-        private const string TABLE_COUNT_TEMPLATE = "SELECT 1 QueueLength FROM {0} WITH (NOLOCK)";
-        private const string ORDERUPDATES_COUNT_TEMPLATE = @"SELECT 1 FROM LdmCore.dbo.OrderUpdates WITH (NOLOCK) WHERE Identifier{0}LIKE '%WcfReceiver_OfficeExpressIntegrationService%'";
+        private const string TABLE_COUNT_TEMPLATE = "SELECT COUNT(*) QueueLength FROM {0} WITH (NOLOCK)";
 
-        public QueueRepository(Func<LdmCoreContext> factory)
+        public QueueRepository(IConfiguration config) 
+            => _db = new System.Data.SqlClient.SqlConnection(config.GetConnectionString("LdmCore"));
+
+        public async Task<IEnumerable<KeyValuePair<string,int>>> GetQueueDataAsync<T>()
+        
         {
-            _factory = factory;
-        }
+            if (!EnumExtensions.IsQueueTable<T>())
+                throw new ArgumentException($"{typeof(T).ToString()} does not have the QueueTableAttribute");
 
-        public async Task<IEnumerable<KeyValuePair<string,int>>> GetQueueData()
-        {
             var data = new List<KeyValuePair<string, int>>();
+
             int length;
-            foreach(QueueTable key in Enum.GetValues(typeof(QueueTable)))
+            foreach (Enum key in Enum.GetValues(typeof(T)))
             {
                 length = await GetQueueCountAsync(key);
-                
-                data.Add(new KeyValuePair<string, int>(key.ToString(), length));
+
+                string queueName;
+                if (!key.TryGetQueueName(out queueName))
+                    queueName = key.ToString();
+
+                data.Add(new KeyValuePair<string, int>(queueName, length));
             }
-            length = await GetOrderUpdatesAsync();
-            data.Add(new KeyValuePair<string, int>("OrderUpdates", length));
-            length = await GetOrderUpdatesAsync();
-            data.Add(new KeyValuePair<string, int>("OfficeExpressIntegration", length));
             return data;
         }
 
         #region PrivateMethods
 
-        private async Task<int> GetQueueCountAsync(QueueTable table)
+        /// <summary>
+        /// <para>Returns the length of an <see cref="Enum"/> that uses <see cref="QueueTableAttribute"/></para>
+        /// <para>Can use the <see cref="QueryAttribute"/> to specify a query to generate the data</para>
+        /// <para>Can use the <see cref="QueueResourceAttribute"/> to specify a queue name that does not comply to an enum name</para>
+        /// </summary>
+        /// <param name="queue"></param>
+        /// <returns>The number of items in the queue</returns>
+        private async Task<int> GetQueueCountAsync(Enum queue)
         {
-            using (var context = _db)
+            int length;
+            if (queue.TryGetQuery(out var query))
+                length = await GetQueueCountByQueryAsync(query);
+            else
             {
-                var sql = String.Format(TABLE_COUNT_TEMPLATE, table.ToString());
-                var retVal = await context.Database.ExecuteSqlRawAsync(sql);
-                // ExecuteRawSQL has a querk where it returns -1 for 0 rows;                   
-                if (retVal == -1)
-                    retVal = 0;
-                return retVal;
-            }
-        }
-
-        private async Task<int> GetOrderUpdatesAsync(bool withLeap = false)
-        {
-            using (var context = _db)
-            {
-                string sql;
-                if (withLeap)
-                    sql = String.Format(ORDERUPDATES_COUNT_TEMPLATE, "");
+                if (queue.TryGetResource(out var resource))
+                    length = await GetQueueCountByNameAsync(resource);
                 else
-                    sql = String.Format(ORDERUPDATES_COUNT_TEMPLATE, " NOT ");
-
-                var retVal = await context.Database.ExecuteSqlRawAsync(sql);
-                // ExecuteRawSQL has a querk where it returns -1 for 0 rows;                   
-                if (retVal == -1)
-                    retVal = 0;
-                return retVal;
+                    length = await GetQueueCountByNameAsync(queue.ToString());
             }
+            return length;
         }
 
+        private async Task<int> GetQueueCountByQueryAsync(string query)
+        {
+            var result = await _db.QueryAsync<int>(query);
+            return result.Single();
+        }
 
+        private async Task<int> GetQueueCountByNameAsync(string queueTable)
+        {
+            var query = String.Format(TABLE_COUNT_TEMPLATE, queueTable);
+            var result = await _db.QueryAsync<int>(query);
+            return result.Single();            
+        }
 
         #endregion
     }

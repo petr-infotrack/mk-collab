@@ -8,6 +8,6 @@ namespace AlertsAdmin.Domain.Interfaces
 {
     public interface IQueueRepository
     {
-        Task<IEnumerable<KeyValuePair<string, int>>> GetQueueData();
+        Task<IEnumerable<KeyValuePair<string, int>>> GetQueueDataAsync<T>();
     }
 }
