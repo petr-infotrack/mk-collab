@@ -1,0 +1,33 @@
+﻿@model AlertsAdmin.Models.MessageViewModel
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().Id)</th>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().Template)</th>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().Level)</th>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().Priority)</th>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().Notification)</th>
+            <th>@Html.DisplayNameFor(model => model.Messages.First().DefaultStatus)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model.Messages)
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => message.Id)</td>
+                <td>@Html.DisplayFor(m => message.Template)</td>
+                <td>@Html.DisplayFor(m => message.Level)</td>
+                <td>@Html.DisplayFor(m => message.Priority)</td>
+                <td>@Html.DisplayFor(m => message.Notification)</td>
+                <td>@Html.DisplayFor(m => message.DefaultStatus)</td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", "Message", new { id=message.Id})*@
+                    <button id="editButton" data-id="@message.Id" class="editbtn btn btn-secondary btn-sm">Edit</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

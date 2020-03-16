@@ -1,0 +1,94 @@
+﻿@model AlertsAdmin.Domain.Models.MessageType
+        <div class="modal fade" id="MessageTypeEditPopup" tabindex="-1" aria-labelledby="MessageTypeEditPopupLabel" aria-hidden="fals">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Edit Message</h4>
+                    </div>
+
+                    @using (Html.BeginForm("Edit", null, FormMethod.Post, new { @class = "form-horizontal modal-body", @id = "ModalForm" }))
+                    {
+                        <input type="hidden" asp-for="Id" />
+                        <div class="form-horizontal" style="padding-bottom:5px">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Template, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.Template, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.Template, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Level, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    <select class="selectpicker"
+                                            asp-for="Level" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertLevel>()">
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Level, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Priority, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    <select class="selectpicker"
+                                            asp-for="Priority" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertPriority>()">
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Priority, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Notification, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    <select class="selectpicker"
+                                            asp-for="Notification" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertNotification>()">
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.Notification, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DefaultStatus, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    <select class="selectpicker"
+                                            asp-for="DefaultStatus" asp-items="@Html.GetEnumSelectList<AlertsAdmin.Domain.Enums.AlertStatus>()">
+                                    </select>
+                                    @Html.ValidationMessageFor(model => model.DefaultStatus, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ExpiryTime, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.ExpiryTime, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ExpiryTime, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ExpiryCount, htmlAttributes: new { @class = "control-label col-md-3" })
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.ExpiryCount, new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.ExpiryCount, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="padding:5px">
+
+                            <div class="form-group">
+
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                <input type="submit" class="btn btn-primary" id="confirmok1" value="Save changes" />
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+@section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

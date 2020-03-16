@@ -1,0 +1,50 @@
+﻿@using AlertsAdmin.Domain.Enums
+@model AlertsAdmin.Domain.Models.MessageSearchOptions
+<style>
+    .form-inline input {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .form-inline select {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+    }
+
+    .form-inline label {
+        font-weight: bold
+    }
+</style>
+<div class="pb-3" id="filterForm">
+    @using (Html.BeginForm("Search", "Messages", FormMethod.Post))
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.MessageTemplate)
+            @Html.TextBoxFor(m => m.MessageTemplate, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MessageTemplate, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                @Html.LabelFor(m => m.Levels)
+                @Html.DropDownListFor(m => m.Levels, Html.GetEnumSelectList<AlertLevel>(), new { @class = "form-control selectpicker", @data_style = "rounded-pill shadow-sm", @multiple = true })
+                @Html.ValidationMessageFor(m => m.Levels, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(m => m.Priorities)
+                @Html.DropDownListFor(m => m.Priorities, Html.GetEnumSelectList<AlertPriority>(), new { @class = "form-control selectpicker", @data_style = "rounded-pill shadow-sm", @multiple = true })
+                @Html.ValidationMessageFor(m => m.Levels, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(m => m.Notifications)
+                @Html.DropDownListFor(m => m.Notifications, Html.GetEnumSelectList<AlertNotification>(), new { @class = "form-control selectpicker", @data_style = "rounded-pill shadow-sm", @multiple = true })
+                @Html.ValidationMessageFor(m => m.Notifications, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-3">
+                @Html.LabelFor(m => m.DefaultStatuses)
+                @Html.DropDownListFor(m => m.DefaultStatuses, Html.GetEnumSelectList<AlertStatus>(), new { @class = "form-control selectpicker", @data_style = "rounded-pill shadow-sm", @multiple = true })
+                @Html.ValidationMessageFor(m => m.DefaultStatuses, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    }
+</div>
