@@ -13,6 +13,9 @@ namespace AlertsAdmin.Domain.Models
         public AlertStatus Status { get; set; }
         public string StatusMessage { get; set; }
         public DateTime TimeStamp { get; set; }
+        public int? AckCount { get; set; }
+        public TimeSpan? AckTime { get; set; }
+
 
         public IEnumerable<AlertInstance> Instances { get; set; }
 
@@ -25,5 +28,7 @@ namespace AlertsAdmin.Domain.Models
         public DateTime LastOccurance => Instances.LastOrDefault().Timestamp;
         public string LastOccuranceString => LastOccurance.ToShortTimeString();
         public AlertPriority AlertPriority => Instances.FirstOrDefault().MessageType.Priority;
+        public string Template => Instances.FirstOrDefault().MessageType.Template;
+        public int MessageId => Instances.FirstOrDefault().MessageType.Id;
     }
 }

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Linq;
 using System.ComponentModel;
 using AlertsAdmin.Domain.Attributes;
+using AlertsAdmin.Domain.Enums;
 
 namespace AlertsAdmin.Domain.Extensions
 {
@@ -64,6 +65,20 @@ namespace AlertsAdmin.Domain.Extensions
             return "";
         }
 
+        public static bool TryGetClass(this AlertPriority priority, out string Class)
+        {
+            Class = GetClass(priority);
+            if (string.IsNullOrEmpty(Class))
+                return false;
+            return true;
+        }
+
+        public static string GetClass(this AlertPriority priority)
+        {
+            if (TryGetAttribute<DisplayClassAttribute>(priority, out var attribute))
+                return attribute.DisplayClass;
+            return "";
+        }
 
         #region PrivateMethods
 

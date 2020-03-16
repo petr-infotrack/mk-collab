@@ -32,6 +32,11 @@ namespace AlertsAdmin.Data.Repositories
             return await GetAlertsAsync(a => a.Status != AlertStatus.Disabled && a.Status != AlertStatus.Acknowladged);
         }
 
+        public async Task<Alert> GetAlertAsync(int id)
+        {
+            return (await GetAlertsAsync(a => a.Id == id)).Single();
+        }
+
         public async Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert, bool> predicate = null)
         {
             using (var context = _db)
