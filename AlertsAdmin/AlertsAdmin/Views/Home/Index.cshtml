@@ -1,8 +1,28 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Alerts";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="w-100">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <h2>Chart:</h2>
+            </div>
+            <div class="row">
+                <div id="queueChart" class="ct-chart ct-perfect-fourth" style="overflow:visible; height:75vh; width:90%"></div>
+            </div>
+        </div>
+
+        <div class="col">
+            <h2>Alerts:</h2>
+            <div id="alertDeck" style="height:75vh; overflow-y:hidden;"></div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+    <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+    <script src="~/js/Charting.js"></script>
+    <script src="~/js/Cards.js"></script>
+}

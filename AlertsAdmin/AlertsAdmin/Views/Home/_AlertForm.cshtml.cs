@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace AlertsAdmin.Views.Alerts
+namespace AlertsAdmin.Views.Home
 {
-    public class _AlertGridModel : PageModel
+    public class _AlertFormModel : PageModel
     {
         public void OnGet()
         {

@@ -11,5 +11,6 @@ namespace AlertsAdmin.Domain.Interfaces
         Task<IEnumerable<Alert>> GetAllAlertsAsync();
         Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert, bool> predicate);
         Task<IEnumerable<Alert>> GetActiveAlertsAsync();
+        Task<Alert> GetAlertAsync(int id);
     }
 }

@@ -14,6 +14,7 @@ using AlertsAdmin.Data.Contexts;
 using AlertsAdmin.Data.Repositories;
 using AlertsAdmin.Service.Search;
 using EFCore.DbContextFactory.Extensions;
+using Serilog;
 
 namespace AlertsAdmin
 {
@@ -34,6 +35,7 @@ namespace AlertsAdmin
             services.AddTransient<IAlertRepository, AlertRepository>();
             services.AddTransient<IMessageSearch, MessageSearch>();
             services.AddTransient<IQueueRepository, QueueRepository>();
+            services.AddTransient<IAlertInstanceRepository,AlertInstanceRepository>();
             services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
                             .UseSqlServer(Configuration.GetConnectionString("AlertMonitoring")));
             services.AddDbContextFactory<LdmCoreContext>(builder => builder
@@ -54,6 +56,9 @@ namespace AlertsAdmin
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
