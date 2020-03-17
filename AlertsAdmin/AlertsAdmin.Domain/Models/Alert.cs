@@ -10,19 +10,18 @@ namespace AlertsAdmin.Domain.Models
     public class Alert
     {
         public int Id { get; set; }
-        
+        public int MessageTypeId { get; set; }
         public MessageType MessageType { get; set; }
         public AlertStatus Status { get; set; }
         public string StatusMessage { get; set; }
         public int InstanceCount { get; set; }
-
         public DateTime TimeStamp { get; set; }
         public int? AckCount { get; set; }
         public TimeSpan? AckTime { get; set; }
-
+        public int FirstInstanceId { get; set; }
         public AlertInstance FirstInstance { get; set; }
+        public int LastInstanceId { get; set; }
         public AlertInstance LastInstance { get; set; }
-
         public bool Active { get; set; }
 
         public IEnumerable<AlertInstance> Instances { get; set; }
