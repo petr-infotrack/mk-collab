@@ -43,8 +43,6 @@ namespace AlertsAdmin.Data.Repositories
             {
                 return (await Task.FromResult(
                     context.Alerts
-                        .Include(a => a.Instances)
-                            .ThenInclude(ai => ai.MessageType)
                         .Where(predicate ?? (a => true))
                 )).ToList();
             }
