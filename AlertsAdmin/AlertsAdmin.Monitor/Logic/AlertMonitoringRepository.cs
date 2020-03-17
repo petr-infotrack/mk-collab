@@ -60,23 +60,33 @@ namespace AlertsAdmin.Monitor.Logic
                 await _db.MessageTypes.AddAsync(messageType);
             }
 
-            // TODO Clarify aggregation logic
-            //var alert = await _db.Alerts.FirstOrDefaultAsync(x =>
-            //    x.Template != null && x.Template == message.MessageTemplate);
-
-            //if (alert == null)
-            //{
-            //    alert = new Alert()
-            //    {
-            //        Status = messageType.DefaultStatus,
-            //        StatusMessage = null,
-            //        TimeStamp = DateTime.Now
-            //    };
-
-            //    _db.Alerts.Add(alert);
-            //}
-
             AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
+
+            var firstInstance = await _db.AlertInstances.FirstOrDefaultAsync((x => x.MessageTypeId == messageType.Id));
+            if (firstInstance == null)
+            {
+                firstInstance = instance;
+            }
+            
+
+            // TODO Clarify aggregation logic
+            var alert = await _db.Alerts.FirstOrDefaultAsync(x =>
+                x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
+
+            if (alert == null)
+            {
+                alert = new Alert()
+                {
+                    Status = messageType.DefaultStatus,
+                    StatusMessage = null,
+                    TimeStamp = DateTime.Now,
+                    MessageType = messageType,
+                    FirstInstance = firstInstance,
+                    LastInstance = instance
+                };
+
+                _db.Alerts.Add(alert);
+            }
             
             await _db.AlertInstances.AddAsync(instance);
         }
