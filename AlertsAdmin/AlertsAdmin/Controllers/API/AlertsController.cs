@@ -34,7 +34,8 @@ namespace AlertsAdmin.Controllers.API
         public async Task<IActionResult> Alerts()
         {
             var alerts = await _alertRepository.GetActiveAlertsAsync();
-            return Json(ConvertAlerts(alerts));
+            var alertJson = ConvertAlerts(alerts.OrderBy(a => a.AlertPriority));
+            return Json(alertJson);
         }
 
         [HttpGet]

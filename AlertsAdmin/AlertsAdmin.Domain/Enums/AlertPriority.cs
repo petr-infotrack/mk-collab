@@ -11,7 +11,7 @@ namespace AlertsAdmin.Domain.Enums
         Critical,
         [DisplayClass("bg-warning")]
         High,
-        [DisplayClass("bg-light")]
+        [DisplayClass("bg-info")]
         Low
     }
 }
