@@ -1,0 +1,19 @@
+﻿@page
+@model AlertsAdmin.Domain.Models.Alert
+
+<div class="container w-100">
+    <p hidden id="alertId">@Model.Id</p>
+    <div class="row">
+        <h1>Alert View</h1>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <h3>@Model.Template</h3>
+            <div id="alertList"></div>
+        </div>
+        <div class="col-3">
+            @{ await Html.RenderPartialAsync("_AlertView.cshtml", Model);}
+            @Html.ActionLink("Edit Temlplate","Edit","Messages",new { id=Model.MessageId})
+        </div>
+    </div>
+</div>

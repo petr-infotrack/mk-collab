@@ -1,0 +1,15 @@
+﻿@model AlertsAdmin.Domain.Models.Alert
+
+@using (Html.BeginForm("Alert", "Home", FormMethod.Post, new { @class = "form-horizontal modal-body", @id = "ModalForm" })) {
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(m => m.AckCount)
+            @Html.TextBoxFor(m => m.AckCount)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.AckTime)
+            @Html.TextBoxFor(m => m.AckTime)
+        </div>
+        <button type="submit">Acknowledge Alert</button>
+    </div>
+}

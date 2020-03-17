@@ -33,6 +33,6 @@ namespace AlertsAdmin.Data.Contexts
 
         public DbSet<MessageType> MessageTypes { get; set; }
 
-
+        public DbSet<QueueHistoryRecord> QueueHistory { get; set; }
     }
 }
