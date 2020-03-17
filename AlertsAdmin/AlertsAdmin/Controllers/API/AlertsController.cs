@@ -34,7 +34,7 @@ namespace AlertsAdmin.Controllers.API
         public async Task<IActionResult> Alerts()
         {
             var alerts = await _alertRepository.GetActiveAlertsAsync();
-            var alertJson = ConvertAlerts(alerts.OrderBy(a => a.AlertPriority));
+            var alertJson = ConvertAlerts(alerts.OrderBy(a => a.Priority));
             return Json(alertJson);
         }
 
@@ -63,9 +63,9 @@ namespace AlertsAdmin.Controllers.API
                 new AlertResponse
                 {
                     Id = a.Id,
-                    Title = $"{a.LastOccuranceString} - ({a.Count} Occurances)",
-                    Class = a.AlertPriority.TryGetClass(out var @class) ? @class : "bg-warning",
-                    Message = a.Template
+                    Title = $"{a.TimeStamp} - ({a.InstanceCount} Occurances)",
+                    Class = a.Priority.TryGetClass(out var @class) ? @class : "bg-warning",
+                    Message = a.MessageType.Template
                 }
             );
             return response;

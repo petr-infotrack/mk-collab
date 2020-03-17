@@ -27,6 +27,21 @@ namespace AlertsAdmin.Data.Contexts
                 .HasOne(ai => ai.MessageType)
                 .WithMany(m => m.Instances)
                 .HasForeignKey(ai => ai.MessageTypeId);
+
+            modelBuilder.Entity<Alert>()
+                .HasOne(a => a.MessageType)
+                .WithMany()
+                .HasForeignKey(a => a.MessageTypeId);
+
+            modelBuilder.Entity<Alert>()
+                .HasOne(a => a.FirstInstance)
+                .WithMany()
+                .HasForeignKey(a => a.FirstInstanceId);
+
+            modelBuilder.Entity<Alert>()
+                .HasOne(a => a.LastInstance)
+                .WithMany()
+                .HasForeignKey(a => a.LastInstanceId);
         }
 
         public DbSet<AlertInstance> AlertInstances { get; set; }

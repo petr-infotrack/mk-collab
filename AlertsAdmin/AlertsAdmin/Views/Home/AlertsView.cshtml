@@ -8,12 +8,12 @@
     </div>
     <div class="row">
         <div class="col-9">
-            <h3>@Model.Template</h3>
+            <h3>@Model.MessageType.Template</h3>
             <div id="alertList"></div>
         </div>
         <div class="col-3">
             @{ await Html.RenderPartialAsync("_AlertView.cshtml", Model);}
-            @Html.ActionLink("Edit Temlplate","Edit","Messages",new { id=Model.MessageId})
+            @Html.ActionLink("Edit Temlplate","Edit","Messages",new { id=Model.MessageType.Id})
         </div>
     </div>
 </div>
