@@ -14,6 +14,8 @@ namespace AlertsAdmin.Data.Contexts
         public AlertMonitoringContext(DbContextOptions options)
             : base(options) { }
 
+        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AlertInstance>()

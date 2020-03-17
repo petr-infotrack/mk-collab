@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logic\Mappers\" />
     <Folder Include="Notifiers\" />
   </ItemGroup>
 

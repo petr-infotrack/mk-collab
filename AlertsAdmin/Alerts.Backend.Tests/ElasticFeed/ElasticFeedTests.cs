@@ -15,7 +15,6 @@ namespace Alerts.Backend.Tests.ElasticFeed
             var errors = el.GetElasticSearchErrors(10, 10, 10);
 
             Assert.True(errors.Count>0);
-
         }
 
         [Fact]
@@ -23,11 +22,9 @@ namespace Alerts.Backend.Tests.ElasticFeed
         {
             var el = new ElasticDataRepository();
 
-
             var errors = el.GetElasticErrorMessages(DateTime.Now, 10, 10);
 
             Assert.True(errors.Count > 0);
-
         }
 
         //GetElasticErrorMessages

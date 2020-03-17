@@ -21,9 +21,9 @@ namespace AlertsAdmin.Monitor
 
         private static void Main(string[] args)
         {
-            Configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
-                .Build();
+            //Configuration = new ConfigurationBuilder()
+            //    .AddJsonFile("appsettings.json")
+            //    .Build();
             
 
 

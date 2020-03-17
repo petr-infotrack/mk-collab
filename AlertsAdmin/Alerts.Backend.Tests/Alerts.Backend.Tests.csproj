@@ -13,10 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AlertsData\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AlertsAdmin.Elastic\AlertsAdmin.Elastic.csproj" />
     <ProjectReference Include="..\AlertsAdmin.Monitor\AlertsAdmin.Monitor.csproj" />
   </ItemGroup>

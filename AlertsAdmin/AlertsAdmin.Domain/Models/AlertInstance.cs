@@ -17,7 +17,7 @@ namespace AlertsAdmin.Domain.Models
         public int MessageTypeId { get; set; }
         public MessageType MessageType { get; set; }
 
-        public int AlertId { get; set; }
+        public int? AlertId { get; set; }
         public Alert Alert { get; set; }
     }
 }
