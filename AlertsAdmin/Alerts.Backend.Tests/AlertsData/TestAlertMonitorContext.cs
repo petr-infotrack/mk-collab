@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
+using System.Linq;
 using System.Text;
 using AlertsAdmin.Data.Contexts;
-using AlertsAdmin.Elastic;
 using AlertsAdmin.Elastic.Models;
 using AlertsAdmin.Monitor.Logic;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +10,10 @@ using Xunit;
 
 namespace Alerts.Backend.Tests.AlertsData
 {
-    public class TestErrorProcessing
+    public class TestAlertMonitorContext
     {
 
-        // Set-up routine
-        private AlertMonitoringRepository GetRepository()
+        private AlertMonitoringContext GetContext()
         {
             var connStr = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoring;Integrated Security=SSPI;";
 
@@ -23,15 +21,15 @@ namespace Alerts.Backend.Tests.AlertsData
                 .UseSqlServer(connStr);
 
 
-            Func<AlertMonitoringContext> factory = () => new AlertMonitoringContext(builder.Options);
+           return  new AlertMonitoringContext(builder.Options);
 
-            return new AlertMonitoringRepository(factory);
         }
 
+
         [Fact]
-        public void TestSaveErrorMessage()
+        public void TestEntityAccessForPopulatedRepository()
         {
-            var repo = GetRepository();
+            var db = GetContext();
 
             var message = new ElasticErrorMessage()
             {
@@ -51,46 +49,12 @@ namespace Alerts.Backend.Tests.AlertsData
                 }
             };
 
+            var messageTypeQuery = db.MessageTypes.Include(x => x.Alert).Where(x => x.Id < 100).ToList();
 
-            repo.AddMessageAsync(message).Wait();
-
-           // var result = repo.SaveAsync().Result;
-
-        }
-
-
-        [Fact]
-        public void TestSaveErrorCollection()
-        {
-
-            // Get elastic messages
-            var el = new ElasticDataRepository();
-
-            var errors = el.GetElasticErrorMessages(DateTime.Now, 10, 10);
-
-            Assert.True(errors.Count > 0);
-
-
-            // Get save first 100 into alert monitoring repository
-            var repo = GetRepository();
-
-            var cnt = 0;
-
-            foreach(var  error in errors)
-            {
-                if (cnt >= 1000)
-                {
-                    break;
-                }
-
-                repo.AddMessageAsync(error).Wait();
-
-                //var result = repo.SaveAsync().Result;
-
-                cnt++;
-            }
+            var alertQuery = db.Alerts.Where(x => x.Id   <100).ToList();
 
 
         }
+
     }
 }

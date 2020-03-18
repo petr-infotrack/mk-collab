@@ -28,20 +28,27 @@ namespace AlertsAdmin.Data.Contexts
                 .WithMany(m => m.Instances)
                 .HasForeignKey(ai => ai.MessageTypeId);
 
-            modelBuilder.Entity<Alert>()
-                .HasOne(a => a.MessageType)
-                .WithMany()
-                .HasForeignKey(a => a.MessageTypeId);
+            // -- links MessageType -> Alerts (both ways)
+            modelBuilder.Entity<MessageType>()
+                .HasOne<Alert>(or => or.Alert)
+                .WithOne(lr => lr.MessageType)
+                .HasForeignKey<Alert>(k => k.MessageTypeId);
+            
+            //modelBuilder.Entity<Alert>()
+            //    .HasOne<MessageType>(a => a.MessageType)
+            //    .WithOne(s => s.Alert)
+            ////   // .HasForeignKey(b => b.);
+            //    .HasForeignKey<MessageType>(b => b.Id);
 
-            modelBuilder.Entity<Alert>()
-                .HasOne(a => a.FirstInstance)
-                .WithMany()
-                .HasForeignKey(a => a.FirstInstanceId);
+            //modelBuilder.Entity<Alert>()
+            //    .HasOne<AlertInstance>(a => a.FirstInstance)
+            //    .WithOne(x => x.Alert)
+            //    .HasForeignKey<AlertInstance>(a => a.AlertId);
 
-            modelBuilder.Entity<Alert>()
-                .HasOne(a => a.LastInstance)
-                .WithMany()
-                .HasForeignKey(a => a.LastInstanceId);
+            //modelBuilder.Entity<Alert>()
+            //    .HasOne(a => a.LastInstance)
+            //    .WithMany()
+            //    .HasForeignKey(a => a.LastInstanceId);
         }
 
         public DbSet<AlertInstance> AlertInstances { get; set; }

@@ -9,6 +9,7 @@ using System.Linq;
 using AlertsAdmin.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace AlertsAdmin.Data.Repositories
 {
     public class AlertRepository : IAlertRepository
@@ -29,7 +30,11 @@ namespace AlertsAdmin.Data.Repositories
 
         public async Task<IEnumerable<Alert>> GetActiveAlertsAsync()
         {
-            return await GetAlertsAsync(a => a.Status != AlertStatus.Disabled && a.Status != AlertStatus.Acknowladged);
+
+
+            var data =  await GetAlertsAsync(a => a.Status != AlertStatus.Disabled && a.Status != AlertStatus.Acknowladged);
+
+            return data.ToList();
         }
 
         public async Task<Alert> GetAlertAsync(int id)
@@ -41,10 +46,10 @@ namespace AlertsAdmin.Data.Repositories
         {
             using (var context = _db)
             {
-                return (await Task.FromResult(
-                    context.Alerts
-                        .Where(predicate ?? (a => true))
-                )).ToList();
+                var data =  context.Alerts.Include(x => x.MessageType)
+                    .Where(predicate ?? (a => true)).ToList();
+
+                return await Task.FromResult(data);
             }
         }
 

@@ -19,8 +19,9 @@ namespace AlertsAdmin.Domain.Models
         public int ExpiryCount { get; set; }
         public int ThresholdCount { get; set; }
 
-        public IEnumerable<AlertInstance> Instances { get; set; }
+        public virtual IEnumerable<AlertInstance> Instances { get; set; }
 
+        public Alert Alert { get; set; }
 
     }
 }

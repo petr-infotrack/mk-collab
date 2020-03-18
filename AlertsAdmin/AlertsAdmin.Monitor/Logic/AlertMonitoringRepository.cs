@@ -58,11 +58,17 @@ namespace AlertsAdmin.Monitor.Logic
                 messageType = new MessageTypeMapper().Map(message);
 
                 await _db.MessageTypes.AddAsync(messageType);
+
+                await SaveAsync();
             }
 
             AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
 
-            var firstInstance = await _db.AlertInstances.FirstOrDefaultAsync((x => x.MessageTypeId == messageType.Id));
+            await _db.AlertInstances.AddAsync(instance);
+            await SaveAsync();
+
+
+            var firstInstance = await _db.AlertInstances.FirstOrDefaultAsync(x => x.MessageTypeId == messageType.Id);
             if (firstInstance == null)
             {
                 firstInstance = instance;
@@ -70,7 +76,7 @@ namespace AlertsAdmin.Monitor.Logic
             
 
             // TODO Clarify aggregation logic
-            var alert = await _db.Alerts.FirstOrDefaultAsync(x =>
+            var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
                 x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
 
             if (alert == null)
@@ -80,15 +86,25 @@ namespace AlertsAdmin.Monitor.Logic
                     Status = messageType.DefaultStatus,
                     StatusMessage = null,
                     TimeStamp = DateTime.Now,
-                    MessageType = messageType,
-                    FirstInstance = firstInstance,
-                    LastInstance = instance
+                    MessageTypeId = messageType.Id,
+                    FirstInstanceId = firstInstance.Id,
+
+                    LastInstanceId = instance.Id,
+
                 };
 
                 _db.Alerts.Add(alert);
+
+                await SaveAsync();
             }
+
+            //instance.AlertId = alert.Id;
+            instance.Alert = alert;
+
             
-            await _db.AlertInstances.AddAsync(instance);
+            _db.Entry(instance).State = EntityState.Modified;
+
+            await SaveAsync();
         }
 
         public async Task AddMessageCollectionAsync(IEnumerable<ElasticErrorMessage> messages)
