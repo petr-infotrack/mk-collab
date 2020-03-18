@@ -8,7 +8,7 @@ $(function () {
 function UpdateAlerts() {
     ajax_get_promise('api/v1/Alerts').then((response) => {
         //cardPayload = JSON.parse(response)
-        loadListOfCards(response)
+        loadListOfAlerts(response)
     })
 }
 
@@ -45,7 +45,7 @@ let createTaskCard = (cardResponse) => {
     cardContainer.appendChild(row);
 }
 
-let loadListOfCards = (cardPayload) => {
+let loadListOfAlerts = (cardPayload) => {
     if (cardContainer) {
         document.getElementById('alertDeck').replaceWith(cardContainer);
         return;

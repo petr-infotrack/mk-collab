@@ -17,3 +17,23 @@
         </div>
     </div>
 </div>
+<script type="text/x-handlebars-template" id="tableTemplate">
+    <table class="table">
+        <thead>
+            <tr>
+                {{#each array.[0]}}
+                <th>{{@@key}}</th>
+                {{/ each}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each array}}
+            <tr>
+                {{#each this}}
+                <td>{{ this}}</td>
+                {{/ each}}
+            </tr>
+            {{/ each}}
+        </tbody>
+    </table>
+</script>
