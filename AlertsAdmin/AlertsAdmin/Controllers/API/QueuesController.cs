@@ -18,28 +18,33 @@ namespace AlertsAdmin.Controllers.API
     {
         private const string ROUTE_BASE = "api/v1/queues";
 
-
         private readonly IQueueRepository _queueRepository;
+        private readonly IQueueHistoryService _queueHistoryService;
         private readonly ILogger<QueuesController> _logger;
 
-        public QueuesController(IQueueRepository queueRepository, ILogger<QueuesController> logger)
+        public QueuesController(IQueueRepository queueRepository, ILogger<QueuesController> logger, IQueueHistoryService queueHistoryService)
         {
             _queueRepository = queueRepository;
             _logger = logger;
+            _queueHistoryService = queueHistoryService;
         }
 
         [HttpGet]
         [Route(ROUTE_BASE+"/LdmQueues")]
         public async Task<IActionResult> LdmQueues()
         {
-            return Json(await _queueRepository.GetQueueDataAsync<LdmQueueTable>());
+            var queueData = await _queueRepository.GetQueueDataAsync<LdmQueueTable>();
+            await _queueHistoryService.Process(queueData);
+            return Json(queueData);
         }
 
         [HttpGet]
         [Route(ROUTE_BASE+"/PencilQueues")]
         public async Task<IActionResult> PencilQueues()
         {
-            return Json(await _queueRepository.GetQueueDataAsync<PencilQueueTable>());
+            var queueData = await _queueRepository.GetQueueDataAsync<PencilQueueTable>();
+            await _queueHistoryService.Process(queueData);
+            return Json(queueData);
         }
 
     }

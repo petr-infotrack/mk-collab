@@ -30,7 +30,7 @@ namespace AlertsAdmin.Controllers
         [Route("/alerts/view/{id}")]
         public async Task<IActionResult> AlertViewAsync(int id)
         {
-            //TODO: Don't directly call repository instead call /api/v1/alerts/view/{id} for id. 
+            //TODO: Don't directly call repository instead call /api/v1/alerts/view/{id} for id.
             var alert = await _alertRepository.GetAlertAsync(id);
             if (alert != null)
                 return View("AlertsView",alert);

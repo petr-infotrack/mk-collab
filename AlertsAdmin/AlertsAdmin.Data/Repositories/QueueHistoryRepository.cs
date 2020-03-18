@@ -6,17 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace AlertsAdmin.Data.Repositories
 {
     public class QueueHistoryRepository: IQueueHistoryRepository
     {
-        private Func<AlertMonitoringContext> _factory;
+        private readonly Func<AlertMonitoringContext> _factory;
+        private readonly ILogger<QueueHistoryRepository> _logger;
         private AlertMonitoringContext _db => _factory.Invoke();
 
-        public QueueHistoryRepository(Func<AlertMonitoringContext> factory)
+        public QueueHistoryRepository(Func<AlertMonitoringContext> factory, ILogger<QueueHistoryRepository> logger)
         {
             _factory = factory;
+            _logger = logger;
         }
 
         public async Task InsertRecords(IEnumerable<QueueHistoryRecord> data)
@@ -28,21 +32,29 @@ namespace AlertsAdmin.Data.Repositories
                 await context.SaveChangesAsync();
             }catch(Exception e)
             {
-
+                _logger.LogError($"Could not insert queue history records: {e.Message}");
             }
         }
+
 
         public async Task<IEnumerable<QueueHistoryRecord>> GetLastEntriesAsync(IEnumerable<string> Queues)
         {
             return await Task.WhenAll(
-                    Queues.Select(async (q) => await GetLastEntryAsync(q))
-                );
+                    Queues.Select(async (q) => await GetLastEntryAsync(q)));
         }
 
         public async Task<QueueHistoryRecord> GetLastEntryAsync(string Queue)
         {
-            var records = await GetQueueHistoryAsync(q => q.QueueName.ToUpper() == Queue.ToUpper());
-            return records.OrderBy(r => r.Timestamp).LastOrDefault();
+            try
+            {
+                var records = await GetQueueHistoryAsync(q => q.QueueName.ToUpper() == Queue.ToUpper());
+                return records.OrderBy(r => r.Timestamp).LastOrDefault();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+                return null;
+            }
         }
 
         public async Task<IEnumerable<QueueHistoryRecord>> GetQueueHistoriesAsync(IEnumerable<string> Queues)
