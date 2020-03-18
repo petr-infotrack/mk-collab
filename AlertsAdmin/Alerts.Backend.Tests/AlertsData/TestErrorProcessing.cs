@@ -18,6 +18,7 @@ namespace Alerts.Backend.Tests.AlertsData
         private AlertMonitoringRepository GetRepository()
         {
             var connStr = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoring;Integrated Security=SSPI;";
+            var connStrTest = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoringTest;Integrated Security=SSPI;";
 
             var builder = new DbContextOptionsBuilder<AlertMonitoringContext>()
                 .UseSqlServer(connStr);

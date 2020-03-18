@@ -58,7 +58,6 @@ namespace AlertsAdmin.Monitor.Logic
                 messageType = new MessageTypeMapper().Map(message);
 
                 await _db.MessageTypes.AddAsync(messageType);
-
                 await SaveAsync();
             }
 
@@ -68,12 +67,11 @@ namespace AlertsAdmin.Monitor.Logic
             await SaveAsync();
 
 
-            var firstInstance = await _db.AlertInstances.FirstOrDefaultAsync(x => x.MessageTypeId == messageType.Id);
-            if (firstInstance == null)
-            {
-                firstInstance = instance;
-            }
-            
+            var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
+                                    .OrderBy(o => o.Timestamp)
+                                    .FirstOrDefaultAsync()
+                                ?? instance;
+
 
             // TODO Clarify aggregation logic
             var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
@@ -81,17 +79,7 @@ namespace AlertsAdmin.Monitor.Logic
 
             if (alert == null)
             {
-                alert = new Alert()
-                {
-                    Status = messageType.DefaultStatus,
-                    StatusMessage = null,
-                    TimeStamp = DateTime.Now,
-                    MessageTypeId = messageType.Id,
-                    FirstInstanceId = firstInstance.Id,
-
-                    LastInstanceId = instance.Id,
-
-                };
+                alert = new AlertMapper().Map(messageType, firstInstance.Id, instance.Id);
 
                 _db.Alerts.Add(alert);
 
@@ -100,44 +88,12 @@ namespace AlertsAdmin.Monitor.Logic
 
             //instance.AlertId = alert.Id;
             instance.Alert = alert;
-
-            
+           
+            _db.Entry(alert).State = EntityState.Modified;
             _db.Entry(instance).State = EntityState.Modified;
 
             await SaveAsync();
         }
-
-        public async Task AddMessageCollectionAsync(IEnumerable<ElasticErrorMessage> messages)
-        {
-            //TODO -- fix cultural comparison or implement hash compare
-            //var messageType = await _db.MessageTypes.FirstOrDefaultAsync(x => x.Template != null && x.Template == message.MessageTemplate);
-
-            //if (messageType == null)
-            //{
-            //    messageType = new MessageTypeMapper().Map(message);
-
-            //    await _db.MessageTypes.AddAsync(messageType);
-            //}
-
-            //// TODO Clarify aggregation logic
-            ////var alert = await _db.Alerts.FirstOrDefaultAsync(x =>
-            ////    x.Template != null && x.Template == message.MessageTemplate);
-
-            ////if (alert == null)
-            ////{
-            ////    alert = new Alert()
-            ////    {
-            ////        T
-            ////    };
-
-            ////    _db.Alerts.Add(alert);
-            ////}
-
-            //AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
-
-            //await _db.AlertInstances.AddAsync(instance);
-        }
-
 
         public async Task<int> SaveAsync()
         {

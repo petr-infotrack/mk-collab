@@ -15,7 +15,7 @@ namespace Alerts.Backend.Tests.AlertsData
 
         private AlertMonitoringContext GetContext()
         {
-            var connStr = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoring;Integrated Security=SSPI;";
+            var connStr = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoringTest;Integrated Security=SSPI;";
 
             var builder = new DbContextOptionsBuilder<AlertMonitoringContext>()
                 .UseSqlServer(connStr);
@@ -51,7 +51,7 @@ namespace Alerts.Backend.Tests.AlertsData
 
             var messageTypeQuery = db.MessageTypes.Include(x => x.Alert).Where(x => x.Id < 100).ToList();
 
-            var alertQuery = db.Alerts.Where(x => x.Id   <100).ToList();
+            var alertQuery = db.Alerts.Include(x => x.Instances).Where(x => x.Id   <100).ToList();
 
 
         }
