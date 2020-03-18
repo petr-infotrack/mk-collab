@@ -20,7 +20,7 @@ let createTaskCard = (cardResponse) => {
     let card = document.createElement('div');
     card.className = 'card cursor-pointer';
     card.className = `${card.className} ${cardResponse.class}`
-    card.style = 'min-height: 100px';
+    card.style = 'min-height: 100px; max-height:150px; overflow-y:hidden';
 
     let cardLink = document.createElement('a');
     cardLink.className = 'card-block stretched-link text-decoration-none';
