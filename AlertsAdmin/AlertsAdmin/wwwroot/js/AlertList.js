@@ -1,12 +1,11 @@
 ﻿
 $(function () {
     UpdateAlerts()
-    dataFunctions.push(UpdateAlerts)
 })
 
 function UpdateAlerts() {
-    var alertId = document.getElementById("alertId").nodeValue
-    ajax_get_promise(`api/v1/Alerts/${alertId}`).then((response) => {
+    var alertId = document.getElementById("alertId").innerText
+    ajax_get_promise(`https://localhost:44397/api/v1/Alerts/${alertId}`).then((response) => {
         loadListOfAlerts(response)
     })
 }
@@ -14,5 +13,5 @@ function UpdateAlerts() {
 let loadListOfAlerts = (alertPayload) => {
     var templateText = $("#tableTemplate").html();
     var tableTemplate = Handlebars.compile(templateText);
-    $("#alertList").html(tableTemplate({alertPayload}))
+    $("#alertList").html(tableTemplate({array:alertPayload}))
 };

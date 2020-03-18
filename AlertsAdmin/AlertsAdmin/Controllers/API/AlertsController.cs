@@ -34,8 +34,8 @@ namespace AlertsAdmin.Controllers.API
         public async Task<IActionResult> Alerts()
         {
             var alerts = await _alertRepository.GetActiveAlertsAsync();
-            var alertJson = ConvertAlerts(alerts.OrderBy(a => a.Priority));
-            return Json(alertJson);
+            var payload = ConvertAlerts(alerts.OrderBy(a => a.Priority));
+            return Json(payload);
         }
 
         [HttpGet]
@@ -43,7 +43,8 @@ namespace AlertsAdmin.Controllers.API
         public async Task<IActionResult> Alerts(int id)
         {
             var alertInstances = await _alertInstanceRepository.GetAlertInstancesAsync(id);
-            return Json(alertInstances);
+            var payload = ConvertAlertInstances(alertInstances);
+            return Json(payload);
         }
 
         [HttpGet]
@@ -57,18 +58,29 @@ namespace AlertsAdmin.Controllers.API
             return NotFound();
         }
 
-        private IEnumerable<AlertResponse> ConvertAlerts(IEnumerable<Alert> alerts)
+        private IEnumerable<object> ConvertAlertInstances(IEnumerable<AlertInstance> alertInstances)
         {
-            var response = alerts.Select(a =>
-                new AlertResponse
+            return alertInstances.OrderByDescending(a => a.Timestamp).Select(a =>
+                new
                 {
-                    Id = a.Id,
+                    a.ElasticId,
+                    Timestamp = a.Timestamp.ToShortTimeString(),
+                    a.Message
+                }
+            );
+        }
+
+        private IEnumerable<object> ConvertAlerts(IEnumerable<Alert> alerts)
+        {
+            return alerts.Select(a =>
+                new
+                {
+                    a.Id,
                     Title = $"{a.TimeStamp} - ({a.InstanceCount} Occurances)",
                     Class = a.Priority.TryGetClass(out var @class) ? @class : "bg-warning",
                     Message = a.MessageType.Template
                 }
             );
-            return response;
         }
     }
 }
