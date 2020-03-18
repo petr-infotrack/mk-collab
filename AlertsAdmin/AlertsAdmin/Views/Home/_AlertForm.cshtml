@@ -4,12 +4,14 @@
     <div class="form-horizontal">
         <div class="form-group">
             @Html.LabelFor(m => m.AckCount)
-            @Html.TextBoxFor(m => m.AckCount)
+            @Html.TextBoxFor(m => m.AckCount, "", new { @class = "form-control" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.AckTime)
-            @Html.TextBoxFor(m => m.AckTime)
+            @Html.TextBoxFor(m => m.AckTime, "", new { @class = "form-control" })
         </div>
-        <button type="submit">Acknowledge Alert</button>
+        <button type="submit" class="btn btn-primary">Acknowledge Alert</button>
+        <hr />
+        @Html.ActionLink("Edit Temlplate", "Search", "Messages", new { id = Model.MessageType.Id },new { @class = "btn btn-secondary" })
     </div>
 }

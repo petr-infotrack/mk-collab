@@ -3,23 +3,20 @@
 <div class="container w-100">
     <p hidden id="alertId">@Model.Id</p>
     <div class="row">
-        <h1>Alert View</h1>
-    </div>
-    <div class="row">
         <div class="col-9">
-            <h3>@Model.MessageType.Template</h3>
+            <h2>Alert</h2>
+            <div class="alert alert-primary">@Model.MessageType.Template</div>
             <div id="alertList"></div>
         </div>
         <div class="col-3">
             @{ await Html.RenderPartialAsync("_AlertForm.cshtml", Model);}
-            @Html.ActionLink("Edit Temlplate","Edit","Messages",new { id=Model.MessageType.Id})
         </div>
     </div>
 </div>
 
 <script type="text/x-handlebars-template" id="tableTemplate">
     <table class="table">
-        <thead>
+        <thead class="thead-light">
             <tr>
                 {{#each array.[0]}}
                 <th>{{@@key}}</th>

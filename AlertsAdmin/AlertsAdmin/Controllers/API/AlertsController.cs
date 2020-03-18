@@ -76,7 +76,7 @@ namespace AlertsAdmin.Controllers.API
                 new
                 {
                     a.Id,
-                    Title = $"{a.TimeStamp} - ({a.InstanceCount} Occurances)",
+                    Title = $"{a.TimeStamp.ToShortTimeString()} - ({a.InstanceCount} Occurances)",
                     Class = a.Priority.TryGetClass(out var @class) ? @class : "bg-warning",
                     Message = a.MessageType.Template
                 }
