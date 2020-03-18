@@ -10,5 +10,6 @@ namespace AlertsAdmin.Domain.Models
         public string QueueName { get; set; }
         public int Count { get; set; }
         public DateTime Timestamp { get; set; }
+
     }
 }

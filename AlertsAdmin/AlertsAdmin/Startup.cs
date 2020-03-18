@@ -15,6 +15,7 @@ using AlertsAdmin.Data.Repositories;
 using AlertsAdmin.Service.Search;
 using EFCore.DbContextFactory.Extensions;
 using Serilog;
+using AlertsAdmin.Service;
 
 namespace AlertsAdmin
 {
@@ -36,6 +37,8 @@ namespace AlertsAdmin
             services.AddTransient<IMessageSearch, MessageSearch>();
             services.AddTransient<IQueueRepository, QueueRepository>();
             services.AddTransient<IAlertInstanceRepository,AlertInstanceRepository>();
+            services.AddTransient<IQueueHistoryRepository, QueueHistoryRepository>();
+            services.AddTransient<IQueueHistoryService, QueueHistoryService>();
             services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
                             .UseSqlServer(Configuration.GetConnectionString("AlertMonitoring")));
             services.AddDbContextFactory<LdmCoreContext>(builder => builder
