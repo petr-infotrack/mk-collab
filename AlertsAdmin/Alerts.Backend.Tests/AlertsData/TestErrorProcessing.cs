@@ -18,6 +18,7 @@ namespace Alerts.Backend.Tests.AlertsData
         private AlertMonitoringRepository GetRepository()
         {
             var connStr = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoring;Integrated Security=SSPI;";
+            var connStrTest = "Data Source=auawsrpt001l.Infotrack.com.au;Initial Catalog=AlertMonitoringTest;Integrated Security=SSPI;";
 
             var builder = new DbContextOptionsBuilder<AlertMonitoringContext>()
                 .UseSqlServer(connStr);
@@ -66,7 +67,7 @@ namespace Alerts.Backend.Tests.AlertsData
             // Get elastic messages
             var el = new ElasticDataRepository();
 
-            var errors = el.GetElasticErrorMessages(DateTime.Now, 10, 10);
+            var errors = el.GetElasticErrorMessages(DateTime.Now, 5, 5);
 
             Assert.True(errors.Count > 0);
 

@@ -25,13 +25,14 @@ namespace AlertsAdmin.Domain.Models
       //  public AlertInstance LastInstance { get; set; }
         public bool Active { get; set; }
 
-        public virtual IEnumerable<AlertInstance> Instances { get; set; }
+        public virtual ICollection<AlertInstance> Instances { get; set; }
 
         //public string FirstOccuranceString => FirstInstance.Timestamp.ToShortTimeString();
         //public string LastOccuranceString => LastInstance.Timestamp.ToShortTimeString();
 
-        //public int Count => Instances.Count();
-        //public AlertInstance FirstInstance => Instances.FirstOrDefault();
+        public int Count => Instances?.Count() ?? 0;
+        public AlertInstance FirstInstance => Instances?.FirstOrDefault(x => x.Id == FirstInstanceId);
+        public AlertInstance LastInstance => Instances?.FirstOrDefault(x => x.Id == LastInstanceId);
 
         //public string FirstOccuranceString => FirstOccurance.ToShortTimeString();
 

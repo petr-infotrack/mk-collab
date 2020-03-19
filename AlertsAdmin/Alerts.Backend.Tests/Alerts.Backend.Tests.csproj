@@ -17,4 +17,8 @@
     <ProjectReference Include="..\AlertsAdmin.Monitor\AlertsAdmin.Monitor.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Notification\" />
+  </ItemGroup>
+
 </Project>
