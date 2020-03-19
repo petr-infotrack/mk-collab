@@ -24,6 +24,7 @@ namespace AlertsAdmin.Controllers
         public IActionResult Index()
         {
             return View();
+            //return RedirectToAction("View", "Alerts", new { id = 76 });
         }
 
         [HttpGet]

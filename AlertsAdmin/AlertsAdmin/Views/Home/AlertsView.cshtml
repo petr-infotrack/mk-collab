@@ -1,19 +1,44 @@
-﻿@page
-@model AlertsAdmin.Domain.Models.Alert
+﻿@model AlertsAdmin.Domain.Models.Alert
 
 <div class="container w-100">
     <p hidden id="alertId">@Model.Id</p>
     <div class="row">
-        <h1>Alert View</h1>
-    </div>
-    <div class="row">
         <div class="col-9">
-            <h3>@Model.MessageType.Template</h3>
+            <h2>Alert</h2>
+            <div class="alert alert-primary">@Model.MessageType.Template</div>
             <div id="alertList"></div>
         </div>
         <div class="col-3">
-            @{ await Html.RenderPartialAsync("_AlertView.cshtml", Model);}
-            @Html.ActionLink("Edit Temlplate","Edit","Messages",new { id=Model.MessageType.Id})
+            @{ await Html.RenderPartialAsync("_AlertForm.cshtml", new AlertsAdmin.Domain.Models.AlertAcknowledgeRequest {Id=Model.Id });}
+            <hr />
+            @Html.ActionLink("Edit Temlplate", "Search", "Messages", new { id = Model.MessageType.Id }, new { @class = "btn btn-secondary" })
         </div>
     </div>
 </div>
+
+<script type="text/x-handlebars-template" id="tableTemplate">
+    <table class="table">
+        <thead class="thead-light">
+            <tr>
+                {{#each array.[0]}}
+                <th>{{@@key}}</th>
+                {{/ each}}
+            </tr>
+        </thead>
+        <tbody>
+            {{#each array}}
+            <tr>
+                {{#each this}}
+                <td>{{ this}}</td>
+                {{/ each}}
+            </tr>
+            {{/ each}}
+        </tbody>
+    </table>
+</script>
+
+@section Scripts{ 
+    <script src="~/js/AlertList.js"></script>
+}
+
+

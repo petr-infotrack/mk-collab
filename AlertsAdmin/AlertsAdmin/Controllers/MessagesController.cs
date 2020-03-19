@@ -37,6 +37,14 @@ namespace AlertsAdmin.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Search(int Id)
+        {
+            var message = await _messageRepo.GetMessageByIdAsync(Id);
+            var messages = new List<MessageType>() { message };
+            return View("Index", new MessageViewModel { Messages = messages, options = null });
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Edit(int Id)
         {
             var message = await _messageRepo.GetMessageByIdAsync(Id);
