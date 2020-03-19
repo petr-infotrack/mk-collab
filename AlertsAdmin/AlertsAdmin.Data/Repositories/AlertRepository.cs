@@ -9,7 +9,6 @@ using System.Linq;
 using AlertsAdmin.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace AlertsAdmin.Data.Repositories
 {
     public class AlertRepository : IAlertRepository
@@ -21,6 +20,21 @@ namespace AlertsAdmin.Data.Repositories
         public AlertRepository(Func<AlertMonitoringContext> factory)
         {
             _factory = factory;
+        }
+
+        public async Task AcknowledgeAlert(AlertAcknowledgeRequest request)
+        {
+            using(var context = _db)
+            {
+                var alert = await context.Alerts.FindAsync(request.Id);
+                alert.Status = AlertStatus.Acknowladged;
+                alert.StatusMessage = request.Message;
+                if (request.AckCount != null)
+                    alert.AckCount = request.AckCount;
+                if (request.AckTime != null)
+                    alert.AckTime = request.AckTime;
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<Alert>> GetAllAlertsAsync()

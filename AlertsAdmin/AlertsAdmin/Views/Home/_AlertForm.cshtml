@@ -1,15 +1,44 @@
-﻿@model AlertsAdmin.Domain.Models.Alert
+﻿@model AlertsAdmin.Domain.Models.AlertAcknowledgeRequest
 
-@using (Html.BeginForm("Alert", "Home", FormMethod.Post, new { @class = "form-horizontal modal-body", @id = "ModalForm" })) {
+<form action="/api/v1/alerts/acknowledge" class="form-horizontal modal-body" id="AlertAckForm" method="post">
     <div class="form-horizontal">
         <div class="form-group">
+            @Html.HiddenFor(m => m.Id)
+        </div>
+        <div class="form-group">
             @Html.LabelFor(m => m.AckCount)
-            @Html.TextBoxFor(m => m.AckCount)
+            @Html.TextBoxFor(m => m.AckCount, "", new { @class = "form-control" })
         </div>
         <div class="form-group">
             @Html.LabelFor(m => m.AckTime)
-            @Html.TextBoxFor(m => m.AckTime)
+            @Html.TextBoxFor(m => m.AckTime, "", new { @class = "form-control" })
         </div>
-        <button type="submit">Acknowledge Alert</button>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Message)
+            @Html.TextBoxFor(m => m.Message, "", new { @class = "form-control" })
+        </div>
+        <button type="submit" class="btn btn-primary">Acknowledge Alert</button>
     </div>
-}
+</form>
+
+        @*<form action="/Home/Acknowledge" class="form-horizontal modal-body" id="AlertAckForm" method="post">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <input data-val="true" data-val-required="The Id field is required." id="Id" name="Id" type="hidden" value="76">
+                </div>
+                <div class="form-group">
+                    <label for="AckCount">AckCount</label>
+                    <input class="form-control" id="AckCount" name="AckCount" type="text" value="">
+                </div>
+                <div class="form-group">
+                    <label for="AckTime">AckTime</label>
+                    <input class="form-control" data-val="true" data-val-required="The AckTime field is required." id="AckTime" name="AckTime" type="text" value="00:00:00">
+                </div>
+                <div class="form-group">
+                    <label for="Message">Message</label>
+                    <input class="form-control" id="Message" name="Message" type="text" value="">
+                </div>
+                <button type="submit" class="btn btn-primary">Acknowledge Alert</button>
+            </div>
+            <input name="__RequestVerificationToken" type="hidden" value="CfDJ8NE2QHX9tfJKvaVXPUnCTe1g_Qmj0OUK7dOqaOMAUk4DyQh0oPlJzF3roeQS50Z_21L-rJtNbnj33SH5BInIzVuGoqC_vWt_s8zOkkk74-JvOXm31AhBPhb_7KkSs85g8ZXv_qYxd68KGrOdQpO5kPw">
+        </form>*@
