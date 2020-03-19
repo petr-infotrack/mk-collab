@@ -11,6 +11,7 @@ using System.Reflection;
 using AlertsAdmin.Domain.Models;
 using AlertsAdmin.Models;
 using AlertsAdmin.Domain.Extensions;
+using Microsoft.AspNetCore.Routing;
 
 namespace AlertsAdmin.Controllers.API
 {
@@ -56,6 +57,16 @@ namespace AlertsAdmin.Controllers.API
                 return Json(alert);
             _logger.LogWarning($"Could not find alert with Id: {id}");
             return NotFound();
+        }
+
+        [HttpPost]
+        [Route(ROUTE_BASE + "/acknowledge")]
+        public async Task<IActionResult> Acknowledge(AlertAcknowledgeRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Message) || (request.AckCount == null && request.AckTime == null))
+                return BadRequest();
+            await _alertRepository.AcknowledgeAlert(request);
+            return RedirectToAction("Index", "Home");
         }
 
         private IEnumerable<object> ConvertAlertInstances(IEnumerable<AlertInstance> alertInstances)

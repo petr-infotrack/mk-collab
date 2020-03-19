@@ -9,7 +9,9 @@
             <div id="alertList"></div>
         </div>
         <div class="col-3">
-            @{ await Html.RenderPartialAsync("_AlertForm.cshtml", Model);}
+            @{ await Html.RenderPartialAsync("_AlertForm.cshtml", new AlertsAdmin.Domain.Models.AlertAcknowledgeRequest {Id=Model.Id });}
+            <hr />
+            @Html.ActionLink("Edit Temlplate", "Search", "Messages", new { id = Model.MessageType.Id }, new { @class = "btn btn-secondary" })
         </div>
     </div>
 </div>
