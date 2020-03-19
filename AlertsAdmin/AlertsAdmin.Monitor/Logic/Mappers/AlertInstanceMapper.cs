@@ -14,10 +14,11 @@ namespace AlertsAdmin.Monitor.Logic.Mappers
             {
                 ElasticId = message.ElasticId,
                 Message = message.Message,
-                MessageType = messageType,
-                MessageTypeId = messageType.Id,
                 Timestamp = message.Timestamp,
                 JsonData = null, //TODO populate critical info from the message
+
+                MessageType = messageType ?? null,
+                MessageTypeId = messageType?.Id ?? 0,
             };
 
             return model;

@@ -30,7 +30,7 @@ namespace AlertsAdmin.Domain.Models
         //public string FirstOccuranceString => FirstInstance.Timestamp.ToShortTimeString();
         //public string LastOccuranceString => LastInstance.Timestamp.ToShortTimeString();
 
-        //public int Count => Instances.Count();
+        public int Count => Instances?.Count() ?? 0;
         public AlertInstance FirstInstance => Instances?.FirstOrDefault(x => x.Id == FirstInstanceId);
         public AlertInstance LastInstance => Instances?.FirstOrDefault(x => x.Id == LastInstanceId);
 

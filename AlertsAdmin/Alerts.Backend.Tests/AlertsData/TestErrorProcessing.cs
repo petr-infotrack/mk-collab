@@ -67,7 +67,7 @@ namespace Alerts.Backend.Tests.AlertsData
             // Get elastic messages
             var el = new ElasticDataRepository();
 
-            var errors = el.GetElasticErrorMessages(DateTime.Now, 10, 10);
+            var errors = el.GetElasticErrorMessages(DateTime.Now, 5, 5);
 
             Assert.True(errors.Count > 0);
 

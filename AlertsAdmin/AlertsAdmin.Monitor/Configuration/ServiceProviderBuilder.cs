@@ -21,12 +21,10 @@ namespace AlertsAdmin.Monitor.Configuration
 
             services.AddSingleton<MessageCollectorJob>();
 
-            //services.AddSingleton<ITodoRepository, TodoRepository>();
 
             services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
                 .UseSqlServer(configuration.GetConnectionString("AlertMonitoring")));
 
-            // services.AddHttpClient<ITodoApiClient, TodoApiClient>();
 
             return services.BuildServiceProvider();
            

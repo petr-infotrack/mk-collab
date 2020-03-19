@@ -39,60 +39,86 @@ namespace AlertsAdmin.Monitor.Logic
 
         public async Task<IEnumerable<Alert>> GetAlertsAsync(Func<Alert, bool> predicate = null)
         {
-                return (await Task.FromResult(
-                    _db.Alerts
-                        .Include(a => a.Instances)
-                        .ThenInclude(ai => ai.MessageType)
-                        .Where(predicate ?? (a => true))
-                )).ToList();
+            return (await Task.FromResult(
+                _db.Alerts
+                    .Include(a => a.Instances)
+                    .ThenInclude(ai => ai.MessageType)
+                    .Where(predicate ?? (a => true))
+            )).ToList();
         }
 
+        private bool IsMonitored(ElasticErrorMessage message)
+        {
+
+            //TODO  PROVISIONAL VERSION - REFACTOR
+            if (string.IsNullOrWhiteSpace(message.MessageTemplate))
+            {
+                return false;
+            }
+
+            if (message.MessageTemplate.IndexOf('{') >= 0 && message.MessageTemplate.IndexOf('}') >= 0)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
 
         public async Task AddMessageAsync(ElasticErrorMessage message)
         {
-            //TODO -- fix cultural comparison or implement hash compare
-            var messageType = await _db.MessageTypes.FirstOrDefaultAsync(x => x.Template !=null && x.Template ==  message.MessageTemplate);
 
-            if (messageType == null)
+            MessageType messageType = null;
+
+            if (IsMonitored(message))
             {
-                messageType = new MessageTypeMapper().Map(message);
+                //TODO -- fix cultural comparison or implement hash compare
+                messageType = await _db.MessageTypes.FirstOrDefaultAsync(x => x.Template != null && x.Template == message.MessageTemplate);
 
-                await _db.MessageTypes.AddAsync(messageType);
+                if (messageType == null)
+                {
+                    messageType = new MessageTypeMapper().Map(message);
+
+                    await _db.MessageTypes.AddAsync(messageType);
+                    await SaveAsync();
+                }
+
+
+                AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
+
+                await _db.AlertInstances.AddAsync(instance);
                 await SaveAsync();
+
+
+
+                var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
+                                        .OrderBy(o => o.Timestamp)
+                                        .FirstOrDefaultAsync()
+                                    ?? instance;
+
+
+                var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
+                    x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
+
+                if (alert == null)
+                {
+                    alert = new AlertMapper().Map(messageType, firstInstance.Id, instance.Id);
+
+                    _db.Alerts.Add(alert);
+
+                    await SaveAsync();
+                }
+
+                alert.InstanceCount = _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)?.Count() ?? 0;
+                _db.Entry(alert).State = EntityState.Modified;
+
+                instance.Alert = alert;
+                _db.Entry(instance).State = EntityState.Modified;
+
+                await SaveAsync();
+
             }
 
-            AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
-
-            await _db.AlertInstances.AddAsync(instance);
-            await SaveAsync();
-
-
-            var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
-                                    .OrderBy(o => o.Timestamp)
-                                    .FirstOrDefaultAsync()
-                                ?? instance;
-
-
-            // TODO Clarify aggregation logic
-            var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
-                x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
-
-            if (alert == null)
-            {
-                alert = new AlertMapper().Map(messageType, firstInstance.Id, instance.Id);
-
-                _db.Alerts.Add(alert);
-
-                await SaveAsync();
-            }
-
-            //instance.AlertId = alert.Id;
-            instance.Alert = alert;
-           
-            _db.Entry(alert).State = EntityState.Modified;
-            _db.Entry(instance).State = EntityState.Modified;
-
-            await SaveAsync();
         }
 
         public async Task<int> SaveAsync()
