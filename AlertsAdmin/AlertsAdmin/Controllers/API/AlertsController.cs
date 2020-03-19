@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace AlertsAdmin.Controllers.API
 {
+    [Route("api/v1/[controller]")]
     public class AlertsController: Controller
     {
         private const string ROUTE_BASE = "api/v1/alerts";
@@ -31,7 +32,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        [Route(ROUTE_BASE)]
+        //[Route(ROUTE_BASE)]
         public async Task<IActionResult> Alerts()
         {
             var alerts = await _alertRepository.GetActiveAlertsAsync();
@@ -40,7 +41,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        [Route(ROUTE_BASE+"/{id}")]
+        [Route("{id}")]
         public async Task<IActionResult> Alerts(int id)
         {
             var alertInstances = await _alertInstanceRepository.GetAlertInstancesAsync(id);
@@ -49,7 +50,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        [Route(ROUTE_BASE + "/View/{id}")]
+        [Route("View/{id}")]
         public async Task<IActionResult> Alert(int id)
         {
             var alert = await _alertRepository.GetAlertAsync(id);
@@ -60,7 +61,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpPost]
-        [Route(ROUTE_BASE + "/acknowledge")]
+        [Route("acknowledge")]
         public async Task<IActionResult> Acknowledge(AlertAcknowledgeRequest request)
         {
             if (string.IsNullOrEmpty(request.Message) || (request.AckCount == null && request.AckTime == null))

@@ -1,7 +1,7 @@
 ﻿@model AlertsAdmin.Models.MessageViewModel
 
 
-<table class="table">
+<table class="table" id="messageTable">
     <thead>
         <tr>
             <th>@Html.DisplayNameFor(model => model.Messages.First().Id)</th>
@@ -23,7 +23,6 @@
                 <td>@Html.DisplayFor(m => message.Notification)</td>
                 <td>@Html.DisplayFor(m => message.DefaultStatus)</td>
                 <td>
-                    @*@Html.ActionLink("Edit", "Edit", "Message", new { id=message.Id})*@
                     <button id="editButton" data-id="@message.Id" class="editbtn btn btn-secondary btn-sm">Edit</button>
                 </td>
             </tr>
