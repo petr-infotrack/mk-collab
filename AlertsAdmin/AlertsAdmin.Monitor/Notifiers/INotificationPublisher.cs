@@ -1,6 +1,6 @@
 ﻿namespace AlertsAdmin.Monitor.Notifiers
 {
-    public interface INotificationPublisher<T> 
+    public interface INotificationPublisher<T>
     {
         void Register(INotificationSubscriber<T> subscriber);
 

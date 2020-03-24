@@ -1,7 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Spi;
+using System;
 
 namespace AlertsAdmin.Monitor.Scheduler
 {
@@ -17,7 +17,7 @@ namespace AlertsAdmin.Monitor.Scheduler
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             var job = _provider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
-            
+
             if (job == null)
             {
                 throw new NotSupportedException($"{bundle.JobDetail.JobType.Name} is not supported!");
@@ -25,7 +25,6 @@ namespace AlertsAdmin.Monitor.Scheduler
 
             return job;
         }
-
 
         public void ReturnJob(IJob job)
         {

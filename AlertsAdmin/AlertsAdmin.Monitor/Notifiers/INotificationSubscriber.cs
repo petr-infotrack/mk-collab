@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AlertsAdmin.Monitor.Notifiers
+﻿namespace AlertsAdmin.Monitor.Notifiers
 {
     public interface INotificationSubscriber<T> : INotifier<T>
     {

@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AlertsAdmin.Monitor.Configuration;
+﻿using AlertsAdmin.Monitor.Configuration;
 using AlertsAdmin.Monitor.Scheduler;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz.Spi;
+using System.IO;
 using Topshelf;
-
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Configuration.FileExtensions;
-    using Microsoft.Extensions.Configuration.Json;
-
 
 namespace AlertsAdmin.Monitor
 {
@@ -19,13 +12,17 @@ namespace AlertsAdmin.Monitor
     {
         internal static IConfiguration Configuration { get; set; }
 
+        public static IConfiguration BuildConfiguration()
+        {
+            return new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
+        }
+
         private static void Main(string[] args)
         {
-            //Configuration = new ConfigurationBuilder()
-            //    .AddJsonFile("appsettings.json")
-            //    .Build();
-            
-
+            Configuration = BuildConfiguration();
 
             var serviceProvider = ServiceProviderBuilder.Build(Configuration, new ServiceCollection());
 
@@ -41,7 +38,7 @@ namespace AlertsAdmin.Monitor
                 {
                     var jobFactory = serviceProvider.GetRequiredService<IJobFactory>();
 
-                    serviceConfig.ConstructUsing(() => new SchedulingService(jobFactory));
+                    serviceConfig.ConstructUsing(() => new SchedulingService(jobFactory, Configuration));
 
                     serviceConfig.WhenStarted((service, host) => service.OnStart());
 

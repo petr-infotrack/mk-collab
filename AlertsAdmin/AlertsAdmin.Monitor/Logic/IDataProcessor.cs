@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace AlertsAdmin.Monitor.Logic
+﻿namespace AlertsAdmin.Monitor.Logic
 {
     public interface IDataProcessor<in TRecord>
     {

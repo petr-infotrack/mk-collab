@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AlertsAdmin.Domain.Models;
+﻿using AlertsAdmin.Domain.Models;
 using AlertsAdmin.Elastic.Models;
 
 namespace AlertsAdmin.Monitor.Logic.Mappers

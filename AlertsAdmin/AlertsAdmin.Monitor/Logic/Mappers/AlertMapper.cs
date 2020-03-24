@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AlertsAdmin.Domain.Enums;
-using AlertsAdmin.Domain.Models;
-using AlertsAdmin.Elastic.Models;
+﻿using AlertsAdmin.Domain.Models;
+using System;
 
 namespace AlertsAdmin.Monitor.Logic.Mappers
 {

@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AlertsAdmin.Data.Contexts;
+﻿using AlertsAdmin.Data.Contexts;
 using AlertsAdmin.Domain.Enums;
 using AlertsAdmin.Domain.Models;
 using AlertsAdmin.Elastic.Models;
-using Microsoft.EntityFrameworkCore;
 using AlertsAdmin.Monitor.Logic.Mappers;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AlertsAdmin.Monitor.Logic
 {
-    public class AlertMonitoringRepository
+    public class AlertMonitoringRepository : IAlertMonitoringRepository
     {
-
-        //REVIEW provisional compatibility with the logic of FE 
+        //REVIEW provisional compatibility with the logic of FE
         private readonly Func<AlertMonitoringContext> _factory;
 
         //REVIEW provisional compatibility with the logic of FE
@@ -49,7 +48,6 @@ namespace AlertsAdmin.Monitor.Logic
 
         private bool IsMonitored(ElasticErrorMessage message)
         {
-
             //TODO  PROVISIONAL VERSION - REFACTOR
             if (string.IsNullOrWhiteSpace(message.MessageTemplate))
             {
@@ -62,12 +60,10 @@ namespace AlertsAdmin.Monitor.Logic
             }
 
             return false;
-
         }
 
         public async Task AddMessageAsync(ElasticErrorMessage message)
         {
-
             MessageType messageType = null;
 
             if (IsMonitored(message))
@@ -83,19 +79,15 @@ namespace AlertsAdmin.Monitor.Logic
                     await SaveAsync();
                 }
 
-
                 AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
 
                 await _db.AlertInstances.AddAsync(instance);
                 await SaveAsync();
 
-
-
                 var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
                                         .OrderBy(o => o.Timestamp)
                                         .FirstOrDefaultAsync()
                                     ?? instance;
-
 
                 var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
                     x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
@@ -116,15 +108,12 @@ namespace AlertsAdmin.Monitor.Logic
                 _db.Entry(instance).State = EntityState.Modified;
 
                 await SaveAsync();
-
             }
-
         }
 
         public async Task<int> SaveAsync()
         {
             return await _db.SaveChangesAsync();
         }
-
     }
 }

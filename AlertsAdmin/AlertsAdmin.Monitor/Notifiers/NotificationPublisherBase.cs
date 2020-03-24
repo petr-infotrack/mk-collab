@@ -18,16 +18,13 @@ namespace AlertsAdmin.Monitor.Notifiers
 
         public void Unregister(INotificationSubscriber<T> subscriber)
         {
-
             var idx = subscribers.IndexOf(subscriber);
-            if(idx  >= 0)
+            if (idx >= 0)
             {
                 subscribers.RemoveAt(idx);
             }
         }
 
-    
         public abstract void Publish(T data);
-
     }
 }

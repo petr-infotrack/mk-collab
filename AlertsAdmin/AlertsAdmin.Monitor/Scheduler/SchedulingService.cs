@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using AlertsAdmin.Monitor.Collector;
+﻿using AlertsAdmin.Monitor.Collector;
+using Microsoft.Extensions.Configuration;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
@@ -12,10 +9,12 @@ namespace AlertsAdmin.Monitor.Scheduler
     public class SchedulingService
     {
         private readonly IJobFactory _jobFactory;
+        private readonly IConfiguration _configuration;
 
-        public SchedulingService(IJobFactory jobFactory)
+        public SchedulingService(IJobFactory jobFactory, IConfiguration configuration)
         {
             _jobFactory = jobFactory;
+            _configuration = configuration;
         }
 
         public bool OnStart()
@@ -26,17 +25,18 @@ namespace AlertsAdmin.Monitor.Scheduler
 
             scheduler.Start().Wait();
 
+            var scanInterval = _configuration.GetValue<int>("collector_interval");
+
             var collectorJob = JobBuilder.Create<MessageCollectorJob>()
                 .WithIdentity(JobKey.Create("collector_job"))
                 .Build();
 
-            
             var trigger = TriggerBuilder.Create()
                 .WithIdentity(new TriggerKey("collector_job"))
                 .StartNow()
                 .WithSimpleSchedule(builder =>
                 {
-                    builder.WithIntervalInSeconds(30)
+                    builder.WithIntervalInSeconds(scanInterval)
                         .RepeatForever();
                 })
                 .Build();
