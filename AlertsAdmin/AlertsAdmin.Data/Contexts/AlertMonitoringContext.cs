@@ -10,11 +10,26 @@ namespace AlertsAdmin.Data.Contexts
 {
     public class AlertMonitoringContext : DbContext
     {
-        public AlertMonitoringContext() { }
+        public AlertMonitoringContext() {
+        
+            
+        }
+
         public AlertMonitoringContext(DbContextOptions options)
             : base(options) { }
 
-        
+#if !DEBUG_LOCAL
+
+        protected override void OnConfiguring(DbContextOptionsBuilder builder)
+        {
+
+            var connStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AlertsAdmin;Integrated Security=SSPI;";
+
+            builder.UseSqlServer(connStr);
+
+    }
+
+#endif
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

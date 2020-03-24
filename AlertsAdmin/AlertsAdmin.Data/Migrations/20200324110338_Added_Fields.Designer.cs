@@ -4,14 +4,16 @@ using AlertsAdmin.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AlertsAdmin.Data.Migrations
 {
     [DbContext(typeof(AlertMonitoringContext))]
-    partial class AlertMonitoringContextModelSnapshot : ModelSnapshot
+    [Migration("20200324110338_Added_Fields")]
+    partial class Added_Fields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
