@@ -9,17 +9,14 @@ using AlertsAdmin.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using AlertsAdmin.Domain.Models;
-using AlertsAdmin.Models;
 using AlertsAdmin.Domain.Extensions;
 using Microsoft.AspNetCore.Routing;
 
-namespace AlertsAdmin.Controllers.API
+namespace AlertsAdmin.API.Controllers
 {
     [Route("api/v1/[controller]")]
     public class AlertsController: Controller
     {
-        private const string ROUTE_BASE = "api/v1/alerts";
-
         private readonly IAlertRepository _alertRepository;
         private readonly IAlertInstanceRepository _alertInstanceRepository;
         private readonly ILogger<AlertsController> _logger;
@@ -32,7 +29,6 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        //[Route(ROUTE_BASE)]
         public async Task<IActionResult> Alerts()
         {
             var alerts = await _alertRepository.GetActiveAlertsAsync();

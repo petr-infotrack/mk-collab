@@ -6,7 +6,7 @@ $(function () {
 })
 
 function UpdateAlerts() {
-    ajax_get_promise('api/v1/Alerts').then((response) => {
+    ajax_get_promise(`${constants.AlertsAdminAPIHost}/api/v1/Alerts`).then((response) => {
         //cardPayload = JSON.parse(response)
         loadListOfAlerts(response)
     })

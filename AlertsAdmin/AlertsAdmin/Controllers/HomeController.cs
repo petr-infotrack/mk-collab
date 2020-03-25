@@ -5,47 +5,46 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using AlertsAdmin.Domain.Interfaces;
 using AlertsAdmin.Models;
+using AlertsAdmin.Interfaces;
 
 namespace AlertsAdmin.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IAlertRepository _alertRepository;
+        private readonly IAPIHelper _apiHelper;
 
-        public HomeController(ILogger<HomeController> logger, IAlertRepository alertRepository)
+        public HomeController(ILogger<HomeController> logger, IAPIHelper apiHelper)
         {
             _logger = logger;
-            _alertRepository = alertRepository;
+            _apiHelper = apiHelper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
-            //return RedirectToAction("View", "Alerts", new { id = 76 });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Messages()
+        {
+            return View("Messages");
         }
 
         [HttpGet]
         [Route("/alerts/view/{id}")]
         public async Task<IActionResult> AlertViewAsync(int id)
         {
-            //TODO: Don't directly call repository instead call /api/v1/alerts/view/{id} for id.
-            var alert = await _alertRepository.GetAlertAsync(id);
+            var alert = await _apiHelper.GetAlertAsync(id);
             if (alert != null)
                 return View("AlertsView",alert);
             _logger.LogWarning($"Could not find alert with Id: {id}");
-            return Redirect("Index");
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            return View("Index");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

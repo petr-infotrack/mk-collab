@@ -37,7 +37,7 @@ function ParseChartData(data){
 }
 
 function UpdateChart() {
-    let route = '/api/v1/Queues/'
+    let route = `${constants.AlertsAdminAPIHost}/api/v1/Queues/`
     switch (currentChartScreen) {
         case 1:
             route += 'LdmQueues'

@@ -9,15 +9,13 @@ using AlertsAdmin.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
 using AlertsAdmin.Domain.Models;
-using AlertsAdmin.Models;
 using AlertsAdmin.Domain.Extensions;
 
-namespace AlertsAdmin.Controllers.API
+namespace AlertsAdmin.API.Controllers
 {
+    [Route("api/v1/[controller]")]
     public class QueuesController: Controller
     {
-        private const string ROUTE_BASE = "api/v1/queues";
-
         private readonly IQueueRepository _queueRepository;
         private readonly IQueueHistoryService _queueHistoryService;
         private readonly ILogger<QueuesController> _logger;
@@ -30,7 +28,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        [Route(ROUTE_BASE+"/LdmQueues")]
+        [Route("LdmQueues")]
         public async Task<IActionResult> LdmQueues()
         {
             var queueData = await _queueRepository.GetQueueDataAsync<LdmQueueTable>();
@@ -39,7 +37,7 @@ namespace AlertsAdmin.Controllers.API
         }
 
         [HttpGet]
-        [Route(ROUTE_BASE+"/PencilQueues")]
+        [Route("PencilQueues")]
         public async Task<IActionResult> PencilQueues()
         {
             var queueData = await _queueRepository.GetQueueDataAsync<PencilQueueTable>();

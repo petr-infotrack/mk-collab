@@ -21,9 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlertsAdmin.Data\AlertsAdmin.Data.csproj" />
     <ProjectReference Include="..\AlertsAdmin.Domain\AlertsAdmin.Domain.csproj" />
-    <ProjectReference Include="..\AlertsAdmin.Service\AlertsAdmin.Service.csproj" />
   </ItemGroup>
 
 

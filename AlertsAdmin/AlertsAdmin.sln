@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.Monitor", "Aler
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.Elastic", "AlertsAdmin.Elastic\AlertsAdmin.Elastic.csproj", "{0A934018-E40D-4CEE-824E-CC395236FBC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alerts.Backend.Tests", "Alerts.Backend.Tests\Alerts.Backend.Tests.csproj", "{BC893986-3299-4332-A1C9-7B357A2A17BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alerts.Backend.Tests", "Alerts.Backend.Tests\Alerts.Backend.Tests.csproj", "{BC893986-3299-4332-A1C9-7B357A2A17BB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlertsAdmin.API", "AlertsAdmin.API\AlertsAdmin.API.csproj", "{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +63,10 @@ Global
 		{BC893986-3299-4332-A1C9-7B357A2A17BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC893986-3299-4332-A1C9-7B357A2A17BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC893986-3299-4332-A1C9-7B357A2A17BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{909B2740-3CBC-4847-96ED-27C60DB7193D} = {1C960777-284A-44A6-8F16-E6651B5446B0}
 		{0A934018-E40D-4CEE-824E-CC395236FBC8} = {1C960777-284A-44A6-8F16-E6651B5446B0}
 		{BC893986-3299-4332-A1C9-7B357A2A17BB} = {1C960777-284A-44A6-8F16-E6651B5446B0}
+		{E5D4F7B8-CCCA-48D4-A39C-D1A4F7413555} = {BD76BCDD-BD3A-45E8-8C7E-300B25A9C517}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {04261CC7-82B4-4C76-A0D5-DF3711BBF397}
