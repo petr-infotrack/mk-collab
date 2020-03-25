@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AlertsAdmin.Elastic
 {
-   public static class ElasticVariablesDebug
+   public static class ElasticVariablesPreset
    {
        public const string Username = "log_reader";
        public const string Password = "ipXpjND5tt98GisXLiKw0PkCa";

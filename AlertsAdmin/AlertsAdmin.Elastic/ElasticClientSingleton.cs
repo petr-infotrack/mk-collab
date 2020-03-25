@@ -6,10 +6,10 @@ namespace AlertsAdmin.Elastic
     public class ElasticClientSingleton
     {
         private static ElasticClient instance;
-        private static readonly string UserName = ElasticVariablesDebug.Username;
-        private static readonly string Password = ElasticVariablesDebug.Password;
+        private static string UserName = ElasticVariablesPreset.Username;
+        private static string Password = ElasticVariablesPreset.Password;
 
-        private static readonly string EndPoint = ElasticVariablesDebug.EndPoint;
+        private static string EndPoint = ElasticVariablesPreset.EndPoint;
 
         private ElasticClientSingleton() { }
 
@@ -23,6 +23,13 @@ namespace AlertsAdmin.Elastic
                 }
                 return instance;
             }
+        }
+
+        public static void Configure((string endpoint, string user, string pwd, int scanInterval) config)
+        {
+            UserName = config.user;
+            Password = config.pwd;
+            EndPoint = config.endpoint;
         }
 
         private static ElasticClient GetElasticClient()

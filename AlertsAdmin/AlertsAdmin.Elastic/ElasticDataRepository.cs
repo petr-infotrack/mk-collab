@@ -17,7 +17,14 @@ namespace AlertsAdmin.Elastic
         private int DEFAULT_OFFSET_HOURS = 0;
         private int DEFAULT_SCAN_INTERVAL_MINUTES = 10;
 
-                private static readonly HashSet<string> EligibleEnvironements =
+        private (string endpoint, string user, string pwd, int scanInterval) _config;
+
+        public void Configure((string endpoint, string user, string pwd, int scanInterval) config)
+        {
+            _config = config;
+        }
+
+        private static readonly HashSet<string> EligibleEnvironements =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "Production",
@@ -37,6 +44,9 @@ namespace AlertsAdmin.Elastic
 
             var startDateTime = scanDateTime.AddHours(DEFAULT_OFFSET_HOURS).AddMinutes(scanRangeMin * -1);
             var endDateTime = scanDateTime.AddHours(DEFAULT_OFFSET_HOURS);
+
+            //TODO -- partial hack to avoid cross referencing - refactor
+            ElasticClientSingleton.Configure(_config);
 
             var searchResponse = ElasticClientSingleton.Instance.Search<ElasticErrorMessage>(x => x
                 .Index(Indices.Index(new[]

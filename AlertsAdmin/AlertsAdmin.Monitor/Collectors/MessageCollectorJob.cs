@@ -26,6 +26,9 @@ namespace AlertsAdmin.Monitor.Collector
             // TODO NTH -- replace with IOptions
             var elasticConfig = GetElasticVariables(_configuration);
 
+            //TODO - partial hack to avoid cross referencing - refactor
+            ((ElasticDataRepository)_source).Configure(elasticConfig);
+
             var sourceData = _source.GetErrorMessages(DateTime.Now, elasticConfig.scanInterval, 5);
 
             foreach (var r in sourceData)
