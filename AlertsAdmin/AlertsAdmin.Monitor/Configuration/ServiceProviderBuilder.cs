@@ -2,6 +2,7 @@
 using AlertsAdmin.Elastic;
 using AlertsAdmin.Elastic.Models;
 using AlertsAdmin.Monitor.Collector;
+using AlertsAdmin.Monitor.Filters;
 using AlertsAdmin.Monitor.Logic;
 using AlertsAdmin.Monitor.Notifiers;
 using AlertsAdmin.Monitor.Scheduler;
@@ -27,6 +28,12 @@ namespace AlertsAdmin.Monitor.Configuration
             services.AddTransient<IDataProcessor<ElasticErrorMessage>, AlertDataProcessor>();
 
             services.AddSingleton<MessageCollectorJob>();
+
+            services.AddOptions<CustomFiltersOptions>();
+            services.Configure<CustomFiltersOptions>(configuration.GetSection("customFilters"));
+
+            // force preloading
+            services.AddSingleton<IFilterDefinitions, FilterDefinitions>();
 
             services.AddDbContextFactory<AlertMonitoringContext>(builder => builder
                 .UseSqlServer(configuration.GetConnectionString("AlertMonitoring")));

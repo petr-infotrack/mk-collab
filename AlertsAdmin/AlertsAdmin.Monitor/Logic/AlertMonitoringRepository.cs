@@ -46,69 +46,51 @@ namespace AlertsAdmin.Monitor.Logic
             )).ToList();
         }
 
-        private bool IsMonitored(ElasticErrorMessage message)
-        {
-            //TODO  PROVISIONAL VERSION - REFACTOR
-            if (string.IsNullOrWhiteSpace(message.MessageTemplate))
-            {
-                return false;
-            }
-
-            if (message.MessageTemplate.IndexOf('{') >= 0 && message.MessageTemplate.IndexOf('}') >= 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
 
         public async Task AddMessageAsync(ElasticErrorMessage message)
         {
             MessageType messageType = null;
 
-            if (IsMonitored(message))
+            //TODO -- fix cultural comparison or implement hash compare
+            messageType = await _db.MessageTypes.FirstOrDefaultAsync(x => x.Template != null && x.Template == message.MessageTemplate);
+
+            if (messageType == null)
             {
-                //TODO -- fix cultural comparison or implement hash compare
-                messageType = await _db.MessageTypes.FirstOrDefaultAsync(x => x.Template != null && x.Template == message.MessageTemplate);
+                messageType = new MessageTypeMapper().Map(message);
 
-                if (messageType == null)
-                {
-                    messageType = new MessageTypeMapper().Map(message);
-
-                    await _db.MessageTypes.AddAsync(messageType);
-                    await SaveAsync();
-                }
-
-                AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
-
-                await _db.AlertInstances.AddAsync(instance);
+                await _db.MessageTypes.AddAsync(messageType);
                 await SaveAsync();
+            }
 
-                var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
-                                        .OrderBy(o => o.Timestamp)
-                                        .FirstOrDefaultAsync()
-                                    ?? instance;
+            AlertInstance instance = new AlertInstanceMapper().Map(message, messageType);
 
-                var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
-                    x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
+            await _db.AlertInstances.AddAsync(instance);
+            await SaveAsync();
 
-                if (alert == null)
-                {
-                    alert = new AlertMapper().Map(messageType, firstInstance.Id, instance.Id);
+            var firstInstance = await _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)
+                                    .OrderBy(o => o.Timestamp)
+                                    .FirstOrDefaultAsync()
+                                ?? instance;
 
-                    _db.Alerts.Add(alert);
+            var alert = await _db.Alerts.OrderBy(o => o.TimeStamp).FirstOrDefaultAsync(x =>
+                x.MessageType != null && x.MessageType.Template == message.MessageTemplate);
 
-                    await SaveAsync();
-                }
+            if (alert == null)
+            {
+                alert = new AlertMapper().Map(messageType, firstInstance.Id, instance.Id);
 
-                alert.InstanceCount = _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)?.Count() ?? 0;
-                _db.Entry(alert).State = EntityState.Modified;
-
-                instance.Alert = alert;
-                _db.Entry(instance).State = EntityState.Modified;
+                _db.Alerts.Add(alert);
 
                 await SaveAsync();
             }
+
+            alert.InstanceCount = _db.AlertInstances.Where(x => x.MessageTypeId == messageType.Id)?.Count() ?? 0;
+            _db.Entry(alert).State = EntityState.Modified;
+
+            instance.Alert = alert;
+            _db.Entry(instance).State = EntityState.Modified;
+
+            await SaveAsync();
         }
 
         public async Task<int> SaveAsync()
