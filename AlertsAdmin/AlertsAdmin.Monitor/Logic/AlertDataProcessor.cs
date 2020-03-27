@@ -1,26 +1,30 @@
 ﻿using AlertsAdmin.Elastic.Models;
 using AlertsAdmin.Monitor.Filters;
+using AlertsAdmin.Monitor.Filters.CustomFunctions;
 using AlertsAdmin.Monitor.Notifiers;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace AlertsAdmin.Monitor.Logic
 {
     public class AlertDataProcessor : IDataProcessor<ElasticErrorMessage>
     {
-        private const string Map_FilterName = "map-message-type";
+        private const string FilterApplyName = "map-message-type";
 
-
-        private readonly IConfiguration _configuration;
         private readonly IAlertMonitoringRepository _db;
         private readonly INotificationPublisher<ElasticErrorMessage> _notifier;
         private readonly IFilterDefinitions _filters;
+        private readonly IOptions<CustomFiltersOptions> _filterOptions;
 
-        public AlertDataProcessor(IConfiguration configuration, IAlertMonitoringRepository db, INotificationPublisher<ElasticErrorMessage> notifier, IFilterDefinitions filters)
+        public AlertDataProcessor(IOptions<CustomFiltersOptions> options,
+                                  IFilterDefinitions filters,
+                                  IAlertMonitoringRepository db,
+                                  INotificationPublisher<ElasticErrorMessage> notifier)
         {
-            _configuration = configuration;
             _db = db;
             _notifier = notifier;
             _filters = filters;
+            _filterOptions = options;
         }
 
         public void Process(ElasticErrorMessage message)
@@ -34,40 +38,20 @@ namespace AlertsAdmin.Monitor.Logic
             }
         }
 
-
         private bool IsMonitored(ElasticErrorMessage message)
         {
-            //TODO  PROVISIONAL VERSION - REFACTOR
-
-            if (_configuration.GetValue<bool>("customFilters::active") && _filters.Count() > 0)
+            if (_filterOptions.Value.active && _filters.Count() > 0)
             {
-                var applicableFilters = _filters.GetFilters(new string[] { Map_FilterName });
+                var applicableFilters = _filters.GetFilters(new string[] { FilterApplyName });
 
-                var result = true;
-
-                foreach(var f in applicableFilters)
-                {
-                    result = result && f.Conditions.TrueForAll(c => c.Function(message));
-                }
-
-                return result;
+                return applicableFilters.TrueForAll(f =>
+                    f.Conditions.TrueForAll(c => c.Function(message))
+                );
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(message.MessageTemplate))
-                {
-                    return false;
-                }
-
-                // TODO - refactor or implement proper regex  - if no custom filter is used 
-                if (message.MessageTemplate.IndexOf('{') >= 0 && message.MessageTemplate.IndexOf('}') >= 0)
-                {
-                    return true;
-                }
+                return (new DefaultFilterFunctions().IsMessageMonitored(message));
             }
-
-            return false;
         }
-
     }
 }
