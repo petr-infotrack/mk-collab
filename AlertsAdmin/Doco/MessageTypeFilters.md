@@ -1,16 +1,14 @@
 # Message Type Filter
-## Filter Logic
-
-### Filter Types:
+## Filter Types:
 - `text` filter - compares equality of a selected field and provided value
 - `regex` filter - match the selected field with regex expression
 - `function` filter - executes function from embedded or external function library (suitable for more complex matching)
 
-### Filter Structure
+## Filter Structure
 
 Filter definition is stored using JSON syntax. However to simply the manual entry and readability of the definition, YAML entry will be provided as follow:
 
-Syntax:
+<i>Filter fields:</i>
 - `active` true or false to active use of custom filters
 - `filters` keyword defines root level for definition of one of more filters (at least one is required)
 - `match` defines one or more conditions that applies to a particular filter (at least one is required)
